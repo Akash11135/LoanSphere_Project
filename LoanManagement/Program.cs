@@ -1,3 +1,7 @@
+using LoanManagement.Data;
+using LoanManagement.Repository;
+using LoanManagement.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace LoanManagement
 {
@@ -13,6 +17,15 @@ namespace LoanManagement
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Add DbContext
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Add other services
+            builder.Services.AddScoped<LoanRepo>();
+            builder.Services.AddScoped<LoanService>();
+            builder.Services.AddScoped<EMIService>();
 
             var app = builder.Build();
 
