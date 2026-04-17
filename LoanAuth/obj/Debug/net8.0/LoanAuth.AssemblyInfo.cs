@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LoanAuth")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec88e6a52ffcad00d975118340b894db1f3169df")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5487e3d1aa845f593b557e854a9d1432785081f7")]
 [assembly: System.Reflection.AssemblyProductAttribute("LoanAuth")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LoanAuth")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
