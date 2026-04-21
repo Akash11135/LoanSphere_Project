@@ -1,18 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\loanshere\\LoanSphere_Project\\",
+  "WorkspaceRootPath": "F:\\LoanSphere_Project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{716111DA-5CAD-47E4-B7C5-FCA255B8862A}|LoanSphere_Frontend\\LoanSphere_Frontend.csproj|d:\\loanshere\\loansphere_project\\loansphere_frontend\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{716111DA-5CAD-47E4-B7C5-FCA255B8862A}|LoanSphere_Frontend\\LoanSphere_Frontend.csproj|solutionrelative:loansphere_frontend\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|f:\\loansphere_project\\loanauth\\loanauth\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|solutionrelative:loanauth\\loanauth\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{716111DA-5CAD-47E4-B7C5-FCA255B8862A}|LoanSphere_Frontend\\LoanSphere_Frontend.csproj|d:\\loanshere\\loansphere_project\\loansphere_frontend\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{716111DA-5CAD-47E4-B7C5-FCA255B8862A}|LoanSphere_Frontend\\LoanSphere_Frontend.csproj|solutionrelative:loansphere_frontend\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|f:\\loansphere_project\\loanauth\\loanauth\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|solutionrelative:loanauth\\loanauth\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{716111DA-5CAD-47E4-B7C5-FCA255B8862A}|LoanSphere_Frontend\\LoanSphere_Frontend.csproj|d:\\loanshere\\loansphere_project\\loansphere_frontend\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{716111DA-5CAD-47E4-B7C5-FCA255B8862A}|LoanSphere_Frontend\\LoanSphere_Frontend.csproj|solutionrelative:loansphere_frontend\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|f:\\loansphere_project\\loanauth\\loanauth\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|solutionrelative:loanauth\\loanauth\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|f:\\loansphere_project\\loanauth\\loanauth\\services\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|solutionrelative:loanauth\\loanauth\\services\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|f:\\loansphere_project\\loanauth\\loanauth\\mapping\\automapperprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E75EBBA-A7F3-649B-D742-6EBD7A26D8AD}|LoanAuth\\LoanAuth\\LoanAuth.csproj|solutionrelative:loanauth\\loanauth\\mapping\\automapperprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,64 +30,76 @@
       "DocumentGroups": [
         {
           "DockedWidth": 318,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "site.css",
-              "DocumentMoniker": "D:\\loanshere\\LoanSphere_Project\\LoanSphere_Frontend\\wwwroot\\css\\site.css",
-              "RelativeDocumentMoniker": "LoanSphere_Frontend\\wwwroot\\css\\site.css",
-              "ToolTip": "D:\\loanshere\\LoanSphere_Project\\LoanSphere_Frontend\\wwwroot\\css\\site.css",
-              "RelativeToolTip": "LoanSphere_Frontend\\wwwroot\\css\\site.css",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2026-04-09T10:20:59.441Z"
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\loanshere\\LoanSphere_Project\\LoanSphere_Frontend\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "LoanSphere_Frontend\\Views\\Home\\Index.cshtml",
-              "ToolTip": "D:\\loanshere\\LoanSphere_Project\\LoanSphere_Frontend\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "LoanSphere_Frontend\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAMUAAAAAAAAAAAAAAMkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-09T09:33:57.277Z"
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "LoanAuth\\LoanAuth\\Controllers\\AuthController.cs",
+              "ToolTip": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "LoanAuth\\LoanAuth\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFgAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-21T07:05:38.362Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Services\\IAuthService.cs",
+              "RelativeDocumentMoniker": "LoanAuth\\LoanAuth\\Services\\IAuthService.cs",
+              "ToolTip": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Services\\IAuthService.cs",
+              "RelativeToolTip": "LoanAuth\\LoanAuth\\Services\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-21T06:46:53.511Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\loanshere\\LoanSphere_Project\\LoanSphere_Frontend\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "LoanSphere_Frontend\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "D:\\loanshere\\LoanSphere_Project\\LoanSphere_Frontend\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "LoanSphere_Frontend\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAAAEYAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-09T09:11:14.092Z",
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "LoanAuth\\LoanAuth\\Services\\AuthService.cs",
+              "ToolTip": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Services\\AuthService.cs",
+              "RelativeToolTip": "LoanAuth\\LoanAuth\\Services\\AuthService.cs",
+              "ViewState": "AgIAAIYAAAAAAAAAAAAMwCgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-21T06:43:30.573Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{2d7728c2-de0a-45b5-99aa-89b609dfde73}"
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AutoMapperProfile.cs",
+              "DocumentMoniker": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Mapping\\AutoMapperProfile.cs",
+              "RelativeDocumentMoniker": "LoanAuth\\LoanAuth\\Mapping\\AutoMapperProfile.cs",
+              "ToolTip": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Mapping\\AutoMapperProfile.cs",
+              "RelativeToolTip": "LoanAuth\\LoanAuth\\Mapping\\AutoMapperProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-21T06:37:11.714Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Program.cs",
+              "RelativeDocumentMoniker": "LoanAuth\\LoanAuth\\Program.cs",
+              "ToolTip": "F:\\LoanSphere_Project\\LoanAuth\\LoanAuth\\Program.cs",
+              "RelativeToolTip": "LoanAuth\\LoanAuth\\Program.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAADwv2wAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-21T06:36:00.411Z",
+              "EditorCaption": ""
             }
           ]
         }

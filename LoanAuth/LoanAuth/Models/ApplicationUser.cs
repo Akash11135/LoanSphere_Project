@@ -5,6 +5,6 @@ namespace LoanAuth.Models
     public class ApplicationUser : IdentityUser
     {
         public string FullName { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }

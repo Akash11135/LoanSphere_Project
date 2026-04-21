@@ -9,13 +9,16 @@ namespace LoanAuth.Mappings
         public AutoMapperProfile()
         {
             CreateMap<RegisterCustomerDto, ApplicationUser>()
-                .ForMember(d => d.UserName, o => o.MapFrom(s => s.Email));
+                .ForMember(d => d.UserName, o => o.MapFrom(s => s.Email))
+                .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.Phone));
 
             CreateMap<RegisterAdminDto, ApplicationUser>()
-                .ForMember(d => d.UserName, o => o.MapFrom(s => s.Email));
+                .ForMember(d => d.UserName, o => o.MapFrom(s => s.Email))
+                .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.Phone));
 
             CreateMap<RegisterManagerDto, ApplicationUser>()
-                .ForMember(d => d.UserName, o => o.MapFrom(s => s.Email));
+                .ForMember(d => d.UserName, o => o.MapFrom(s => s.Email))
+                .ForMember(d => d.PhoneNumber, o => o.MapFrom(s => s.Phone));
         }
     }
 }

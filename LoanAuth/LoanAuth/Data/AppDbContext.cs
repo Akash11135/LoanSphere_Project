@@ -18,10 +18,6 @@ namespace LoanAuth.Data
                 entity.Property(u => u.FullName)
                       .IsRequired()
                       .HasMaxLength(100);
-
-                entity.Property(u => u.Phone)
-                      .IsRequired()
-                      .HasMaxLength(10);
             });
         }
     }

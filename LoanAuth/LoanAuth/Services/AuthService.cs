@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using LoanAuth.DTOs;
+﻿using LoanAuth.DTOs;
 using LoanAuth.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -13,27 +12,32 @@ namespace LoanAuth.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
 
-        public AuthService(UserManager<ApplicationUser> userManager,IConfiguration configuration,
-                           IMapper mapper)
+        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _configuration = configuration;
-            _mapper = mapper;
         }
 
-        public async Task<(bool Success, string Message, string? Token)> RegisterCustomerAsync(RegisterCustomerDto dto)
+        // 🔹 CUSTOMER REGISTER
+        public async Task<(bool Success, string Message, string? UserId)> RegisterCustomerAsync(RegisterCustomerDto dto)
         {
             if (dto.Password != dto.ConfirmPassword)
                 return (false, "Passwords do not match.", null);
 
-            var user = _mapper.Map<ApplicationUser>(dto);
+            var user = new ApplicationUser
+            {
+                UserName = dto.Email,
+                Email = dto.Email,
+                FullName = dto.FullName,
+                PhoneNumber = dto.Phone
+            };
 
             return await RegisterUserAsync(user, dto.Password, "Customer");
         }
 
-        public async Task<(bool Success, string Message, string? Token)> RegisterAdminAsync(RegisterAdminDto dto)
+        // 🔹 ADMIN REGISTER
+        public async Task<(bool Success, string Message, string? UserId)> RegisterAdminAsync(RegisterAdminDto dto)
         {
             if (dto.Password != dto.ConfirmPassword)
                 return (false, "Passwords do not match.", null);
@@ -41,12 +45,19 @@ namespace LoanAuth.Services
             if (dto.AdminSecretKey != _configuration["SecretKeys:AdminSecretKey"])
                 return (false, "Invalid admin secret key.", null);
 
-            var user = _mapper.Map<ApplicationUser>(dto);
+            var user = new ApplicationUser
+            {
+                UserName = dto.Email,
+                Email = dto.Email,
+                FullName = dto.FullName,
+                PhoneNumber = dto.Phone
+            };
 
             return await RegisterUserAsync(user, dto.Password, "Admin");
         }
 
-        public async Task<(bool Success, string Message, string? Token)> RegisterManagerAsync(RegisterManagerDto dto)
+        // 🔹 MANAGER REGISTER
+        public async Task<(bool Success, string Message, string? UserId)> RegisterManagerAsync(RegisterManagerDto dto)
         {
             if (dto.Password != dto.ConfirmPassword)
                 return (false, "Passwords do not match.", null);
@@ -54,14 +65,22 @@ namespace LoanAuth.Services
             if (dto.ManagerSecretKey != _configuration["SecretKeys:ManagerSecretKey"])
                 return (false, "Invalid manager secret key.", null);
 
-            var user = _mapper.Map<ApplicationUser>(dto);
+            var user = new ApplicationUser
+            {
+                UserName = dto.Email,
+                Email = dto.Email,
+                FullName = dto.FullName,
+                PhoneNumber = dto.Phone
+            };
 
             return await RegisterUserAsync(user, dto.Password, "Manager");
         }
 
+        // 🔹 LOGIN
         public async Task<(bool Success, string Message, string? Token)> LoginAsync(LoginDto dto)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
+
             if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
                 return (false, "Invalid email or password.", null);
 
@@ -71,15 +90,15 @@ namespace LoanAuth.Services
             return (true, "Login successful.", token);
         }
 
-        // ── Private ────────────────────────────────────────────────────────────────
-
-        private async Task<(bool Success, string Message, string? Token)> RegisterUserAsync(
-    ApplicationUser user, string password, string role)
+        // 🔹 COMMON REGISTER METHOD
+        private async Task<(bool Success, string Message, string? UserId)> RegisterUserAsync(
+            ApplicationUser user, string password, string role)
         {
             if (await _userManager.FindByEmailAsync(user.Email!) != null)
                 return (false, "Email is already registered.", null);
 
             var result = await _userManager.CreateAsync(user, password);
+
             if (!result.Succeeded)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
@@ -87,13 +106,19 @@ namespace LoanAuth.Services
             }
 
             await _userManager.AddToRoleAsync(user, role);
-            return (true, $"{role} registered successfully.", null);
+
+            return (true, $"{role} registered successfully.", user.Id);
         }
 
+        // 🔹 JWT TOKEN
         private string GenerateJwtToken(ApplicationUser user, IList<string> roles)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!));
+
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!)
+            );
+
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
