@@ -1,6 +1,6 @@
 ﻿using LoanManagement.DTOs;
-using LoanManagement.Services;
 using LoanManagement.Models;
+using LoanManagement.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoanManagement.Controllers
@@ -23,14 +23,14 @@ namespace LoanManagement.Controllers
             var resp = await _loanService.GetAllService();
             if (resp == null)
             {
-                return Ok(new { mess=$"Unable to find all Loans BEC" });
+                return Ok(new { mess = $"Unable to find all Loans BEC" });
             }
             return Ok(resp);
         }
 
         [HttpGet("getbyid/{id}")]
-        public async Task<IActionResult> GetById(int id) 
-        { 
+        public async Task<IActionResult> GetById(int id)
+        {
             var resp = await _loanService.GetByIdService(id);
             if (resp == null)
             {
@@ -40,13 +40,13 @@ namespace LoanManagement.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update(int id , Loan loan)
+        public async Task<IActionResult> Update(int id, Loan loan)
         {
             if (id != loan.LoanId)
             {
                 return BadRequest("Id not found BEC");
             }
-            var resp = await _loanService.UpdateService(id,loan);
+            var resp = await _loanService.UpdateService(id, loan);
             if (resp == null)
             {
                 return Ok(new { mess = $"Loan with id:{id} not found BEC." });
@@ -67,12 +67,12 @@ namespace LoanManagement.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(int id) 
-        { 
+        public async Task<IActionResult> Delete(int id)
+        {
             var res = await _loanService.DeleteService(id);
             if (res == null)
             {
-                return Ok(new {mess="Unable to delete"});
+                return Ok(new { mess = "Unable to delete" });
             }
             return Ok(res);
         }
