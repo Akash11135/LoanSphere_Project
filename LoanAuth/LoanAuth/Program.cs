@@ -1,7 +1,4 @@
-
-using AutoMapper;
 using LoanAuth.Data;
-using LoanAuth.Mappings;
 using LoanAuth.Models;
 using LoanAuth.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,9 +15,11 @@ namespace LoanAuth
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // 🔹 Database
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // 🔹 Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -32,7 +31,14 @@ namespace LoanAuth
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
+            // 🔹 JWT
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            var secretKey = jwtSettings["SecretKey"];
+
+            if (string.IsNullOrEmpty(secretKey))
+                throw new Exception("JWT SecretKey missing");
+
+            var key = Encoding.UTF8.GetBytes(secretKey);
 
             builder.Services.AddAuthentication(options =>
             {
@@ -47,31 +53,31 @@ namespace LoanAuth
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+
                     ValidIssuer = jwtSettings["Issuer"],
                     ValidAudience = jwtSettings["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!))
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });
 
             builder.Services.AddAuthorization();
+
+            // 🔹 Services
             builder.Services.AddScoped<IAuthService, AuthService>();
-            // Add services to the container.
+            builder.Services.AddHttpClient();
 
-            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-
+            // 🔹 Controllers + Swagger
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            
-
             var app = builder.Build();
 
+            // 🔹 Role Seeding
             using (var scope = app.Services.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
                 string[] roles = { "Customer", "Manager", "Admin" };
 
                 foreach (var role in roles)
@@ -83,8 +89,7 @@ namespace LoanAuth
                 }
             }
 
-
-            // Configure the HTTP request pipeline.
+            // 🔹 Middleware
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -92,10 +97,9 @@ namespace LoanAuth
             }
 
             app.UseHttpsRedirection();
+
             app.UseAuthentication();
-
             app.UseAuthorization();
-
 
             app.MapControllers();
 
