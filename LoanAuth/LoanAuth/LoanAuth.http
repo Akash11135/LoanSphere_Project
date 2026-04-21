@@ -1,4 +1,4 @@
-@LoanAuth_HostAddress = http://localhost:5167
+@LoanAuth_HostAddress = http://localhost:5270
 
 GET {{LoanAuth_HostAddress}}/weatherforecast/
 Accept: application/json

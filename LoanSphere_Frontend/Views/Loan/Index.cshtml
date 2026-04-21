@@ -1,0 +1,238 @@
+﻿<style>
+    .page-container {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        min-height: 100vh;
+        background: #f8fafc;
+    }
+
+    /* LEFT PANEL */
+    .track {
+        background: #f1f5f9;
+        padding: 40px 25px;
+        border-right: 1px solid #e2e8f0;
+    }
+
+        .track h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1.2;
+        }
+
+        .track p {
+            font-size: 14px;
+            margin-top: 10px;
+            color: var(--muted-text);
+        }
+
+    /* steps */
+    .step {
+        margin-top: 25px;
+    }
+
+        .step small {
+            color: #94a3b8;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .step span {
+            display: block;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+    /* RIGHT FORM */
+    .form-body {
+        flex: 1;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+    }
+
+    /* Section Title */
+    .section-title {
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    /* PURPOSE CARDS */
+    .purpose-container {
+        display: flex;
+        gap: 12px;
+    }
+
+        .purpose-container input {
+            display: none;
+        }
+
+    .purpose-card {
+        flex: 1;
+        padding: 16px;
+        background: var(--secondary-color);
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 14px;
+    }
+
+        .purpose-card:hover {
+            background: #e2e8f0;
+        }
+
+    .purpose-container input:checked + .purpose-card {
+        background: var(--primary-color);
+        color: #fff;
+    }
+
+    .purpose-icon {
+        display: block;
+        font-size: 20px;
+        margin-bottom: 6px;
+    }
+
+    /* DOCUMENT UPLOAD */
+    .upload-grid {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+    }
+
+    .upload-card {
+        flex: 1;
+        border: 2px dashed #cbd5f5;
+        border-radius: 10px;
+        padding: 25px;
+        text-align: center;
+        background: #f8fafc;
+    }
+
+        .upload-card button {
+            margin-top: 10px;
+        }
+
+    /* FOOTER ACTIONS */
+    .form-footer {
+        margin-top: 30px;
+    }
+</style>
+
+
+<div class="page-container">
+
+    <!-- LEFT SIDE -->
+    <div class="track">
+        <h1>Secure Your Future.</h1>
+        <p>
+            Complete your application in under 5 minutes. Your data is handled securely.
+        </p>
+
+        <div class="step">
+            <small>STEP 1</small>
+            <span>Identity Verified</span>
+        </div>
+
+        <div class="step">
+            <small>STEP 2</small>
+            <span>Loan Specifications</span>
+        </div>
+
+        <div class="step">
+            <small>STEP 3</small>
+            <span>Documentation</span>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="form-body">
+
+        <h3 class="section-title">Loan Specifications</h3>
+
+        <!-- Loan Amount -->
+        <div class="form-group">
+            <label class="form-label">Loan Amount</label>
+            <input type="number" class="form-control" placeholder="₹ 5,000" />
+            <span class="form-text">Min: ₹5000</span>
+        </div>
+
+        <!-- Loan Term -->
+        <div class="form-group">
+            <label class="form-label">Loan Term</label>
+            <select class="form-control select-control">
+                <option>12 Months</option>
+                <option>24 Months</option>
+                <option>36 Months</option>
+            </select>
+        </div>
+
+        <!-- PURPOSE -->
+        <div class="form-group">
+            <label class="form-label">Purpose of Loan</label>
+
+            <div class="purpose-container">
+
+                <label>
+                    <input type="radio" name="purpose" value="home" checked />
+                    <div class="purpose-card">
+                        <span class="purpose-icon">🏠</span>
+                        Home
+                    </div>
+                </label>
+
+                <label>
+                    <input type="radio" name="purpose" value="auto" />
+                    <div class="purpose-card">
+                        <span class="purpose-icon">🚗</span>
+                        Auto
+                    </div>
+                </label>
+
+                <label>
+                    <input type="radio" name="purpose" value="education" />
+                    <div class="purpose-card">
+                        <span class="purpose-icon">🎓</span>
+                        Education
+                    </div>
+                </label>
+
+                <label>
+                    <input type="radio" name="purpose" value="other" />
+                    <div class="purpose-card">
+                        <span class="purpose-icon">•••</span>
+                        Other
+                    </div>
+                </label>
+
+            </div>
+        </div>
+
+        <!-- DOCUMENTS -->
+        <h3 class="section-title">Verification Documents</h3>
+
+        <div class="upload-grid">
+
+            <div class="upload-card">
+                <p><strong>Government ID</strong></p>
+                <small>Passport / Driver’s License</small><br />
+                <button class="app-btn app-btn-secondary">Select File</button>
+            </div>
+
+            <div class="upload-card">
+                <p><strong>Proof of Income</strong></p>
+                <small>Last 3 months payslips</small><br />
+                <button class="app-btn app-btn-secondary">Select File</button>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="flex-between form-footer">
+            <button class="app-btn app-btn-secondary">Cancel</button>
+            <button class="app-btn app-btn-primary"><a asp-controller ="Home" asp-action="Index">Submit Application</a></button>
+        </div>
+
+    </div>
+
+</div>
