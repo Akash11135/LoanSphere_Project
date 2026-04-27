@@ -1,0 +1,675 @@
+@* Model LoanManagement.DTOs. *@
+@model LoanSphere_Frontend.DTOs.CreateLoanDto
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LoanSphere — New Loan Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="site.css" />
+    <style>
+        html, body { margin: 0; padding: 0; background: #f3f4f6; }
+
+        /* ── Stepper Sidebar ── */
+        .ls-apply-sidebar {
+            background: #fff;
+            border-right: 1px solid #e5e7eb;
+            width: 280px;
+            min-height: 100vh;
+            padding: 2.5rem 1.75rem;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        .ls-apply-sidebar-badge {
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+        .ls-apply-sidebar-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+        .ls-apply-sidebar-desc {
+            font-size: .8rem;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+        /* Steps */
+        .ls-step-list { display: flex; flex-direction: column; gap: 0; }
+        .ls-step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: .9rem;
+            position: relative;
+        }
+        .ls-step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 2.2rem;
+            bottom: -1.5rem;
+            width: 1px;
+            background: #e5e7eb;
+        }
+        .ls-step-item.active::after { background: #1e3a5f; }
+        .ls-step-number {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .75rem;
+            font-weight: 700;
+            color: #9ca3af;
+            background: #fff;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+        .ls-step-item.active .ls-step-number {
+            background: #1e3a5f;
+            border-color: #1e3a5f;
+            color: #fff;
+        }
+        .ls-step-item.done .ls-step-number {
+            background: #d1fae5;
+            border-color: #0d6f4f;
+            color: #0d6f4f;
+        }
+        .ls-step-body { padding-bottom: 1.75rem; }
+        .ls-step-label {
+            font-size: .85rem;
+            font-weight: 600;
+            color: #6b7280;
+        }
+        .ls-step-item.active .ls-step-label { color: #0f172a; }
+        .ls-step-sublabel {
+            font-size: .72rem;
+            color: #9ca3af;
+            margin-top: .1rem;
+        }
+        .ls-step-item.active .ls-step-sublabel { color: #6b7280; }
+
+        .ls-apply-sidebar-footer {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .75rem 1rem;
+            background: #f0f6ff;
+            border-radius: .5rem;
+            font-size: .7rem;
+            font-weight: 600;
+            color: #1e3a5f;
+        }
+
+        /* ── Main Content Area ── */
+        .ls-apply-main {
+            flex: 1;
+            padding: 2.5rem 3rem;
+            overflow-y: auto;
+        }
+
+        /* Section headings */
+        .ls-section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.75rem;
+        }
+        .ls-section-heading h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+        .ls-required-badge {
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #1e3a5f;
+            border: 1.5px solid #1e3a5f;
+            border-radius: .25rem;
+            padding: .15rem .5rem;
+        }
+
+        /* Form fields */
+        .ls-field-label {
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: .4rem;
+        }
+        .ls-amount-wrap {
+            position: relative;
+        }
+        .ls-amount-prefix {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        .ls-amount-input {
+            width: 100%;
+            padding: .85rem 1rem .85rem 2.5rem;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #0f172a;
+            border: 1.5px solid #e5e7eb;
+            border-radius: .5rem;
+            background: #fff;
+            outline: none;
+            transition: border-color .2s;
+        }
+        .ls-amount-input:focus { border-color: #1e3a5f; }
+        .ls-amount-hint {
+            display: flex;
+            justify-content: space-between;
+            font-size: .7rem;
+            color: #9ca3af;
+            margin-top: .35rem;
+        }
+        .ls-select-field {
+            width: 100%;
+            padding: .7rem 1rem;
+            font-size: .85rem;
+            font-weight: 500;
+            color: #0f172a;
+            border: 1.5px solid #e5e7eb;
+            border-radius: .5rem;
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 1rem center;
+            -webkit-appearance: none;
+            outline: none;
+            transition: border-color .2s;
+            cursor: pointer;
+        }
+        .ls-select-field:focus { border-color: #1e3a5f; }
+
+        /* Divider between sections */
+        .ls-section-divider { border: none; border-top: 1.5px solid #f3f4f6; margin: 2rem 0; }
+
+        /* Upload cards */
+        .ls-upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .ls-upload-card {
+            border: 1.5px dashed #d1d5db;
+            border-radius: .75rem;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .6rem;
+            cursor: pointer;
+            transition: border-color .2s, background .2s;
+            background: #fff;
+            text-align: center;
+        }
+        .ls-upload-card:hover { border-color: #1e3a5f; background: #f0f6ff; }
+        .ls-upload-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e3a5f;
+        }
+        .ls-upload-title {
+            font-size: .85rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .ls-upload-sub {
+            font-size: .72rem;
+            color: #6b7280;
+        }
+        .ls-upload-cta {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: #1e3a5f;
+            margin-top: .25rem;
+        }
+        .ls-upload-meta {
+            font-size: .7rem;
+            color: #9ca3af;
+            text-align: right;
+            margin-bottom: .75rem;
+        }
+
+        /* Disclaimer */
+        .ls-disclaimer {
+            background: #f9fafb;
+            border: 1.5px solid #e5e7eb;
+            border-radius: .5rem;
+            padding: 1rem 1.25rem;
+            display: flex;
+            gap: .75rem;
+            align-items: flex-start;
+            margin-top: 1.5rem;
+        }
+        .ls-disclaimer p {
+            font-size: .75rem;
+            color: #6b7280;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Footer actions */
+        .ls-apply-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+        }
+        .ls-btn-cancel {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .65rem 1.25rem;
+            font-size: .82rem;
+            font-weight: 600;
+            color: #6b7280;
+            border: 1.5px dashed #d1d5db;
+            border-radius: .5rem;
+            background: transparent;
+            text-decoration: none;
+            cursor: pointer;
+            transition: border-color .2s, color .2s;
+        }
+        .ls-btn-cancel:hover { border-color: #9ca3af; color: #374151; }
+        .ls-btn-continue {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .75rem 1.75rem;
+            font-size: .85rem;
+            font-weight: 700;
+            color: #fff;
+            background: #0f172a;
+            border: none;
+            border-radius: .5rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background .2s;
+        }
+        .ls-btn-continue:hover { background: #1e3a5f; color: #fff; }
+
+        /* Validation */
+        .ls-field-error {
+            font-size: .7rem;
+            color: #dc2626;
+            margin-top: .25rem;
+        }
+        .is-invalid { border-color: #fca5a5 !important; }
+    </style>
+</head>
+
+<body class="ls-app">
+<div class="ls-layout">
+
+    <!-- ── Sidebar Nav ── -->
+    <div class="ls-sidebar">
+        <div class="ls-sidebar-brand">
+            <div class="ls-brand-icon">
+                <i data-lucide="landmark" style="width:18px;height:18px;"></i>
+            </div>
+            <span class="ls-brand-name">LoanSphere</span>
+        </div>
+        <span class="ls-nav-label">Main</span>
+        <a href="/Dashboard" class="ls-nav-item">
+            <i data-lucide="layout-dashboard" class="ls-nav-icon"></i> Dashboard
+        </a>
+        <a href="/LoanPipeline" class="ls-nav-item">
+            <i data-lucide="git-branch" class="ls-nav-icon"></i> Loan Pipeline
+        </a>
+        <a href="/UserDirectory" class="ls-nav-item">
+            <i data-lucide="users" class="ls-nav-icon"></i> User Directory
+        </a>
+        <a href="/Compliance" class="ls-nav-item">
+            <i data-lucide="shield-check" class="ls-nav-icon"></i> Compliance
+        </a>
+        <span class="ls-nav-label" style="margin-top:.5rem;">System</span>
+        <a href="/Settings" class="ls-nav-item">
+            <i data-lucide="settings" class="ls-nav-icon"></i> Settings
+        </a>
+        <div style="flex:1;"></div>
+        <div class="ls-sidebar-user">
+            <div class="ls-user-avatar">AD</div>
+            <div>
+                <div class="ls-user-name">Admin Portal</div>
+                <div class="ls-user-role">LoanSphere Authority</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Page Body ── -->
+    <div style="display:flex;flex-direction:column;margin-left:9rem;min-height:100vh;">
+
+        <!-- Topbar -->
+        <header class="ls-topbar">
+            <span class="ls-page-title">New Loan Application</span>
+            <div class="ls-search-bar">
+                <i data-lucide="search" style="width:15px;height:15px;color:#9ca3af;flex-shrink:0;"></i>
+                <input type="text" placeholder="Search transactions..." />
+            </div>
+            <div class="ls-topbar-right">
+                <button class="ls-icon-btn" title="Notifications">
+                    <i data-lucide="bell" style="width:18px;height:18px;"></i>
+                    <span class="ls-notif-dot"></span>
+                </button>
+                <div class="ls-avatar-pill" title="Admin Portal">AP</div>
+            </div>
+        </header>
+
+        <!-- Main -->
+        <main class="ls-main" style="margin-left:0;padding:0;display:flex;flex-direction:column;flex:1;">
+
+            <div style="display:flex;flex:1;">
+
+                <!-- Application Sidebar -->
+                <aside class="ls-apply-sidebar">
+                    <div class="ls-apply-sidebar-badge">Institutional Lending</div>
+                    <div class="ls-apply-sidebar-title">New Loan<br>Application</div>
+                    <div class="ls-apply-sidebar-desc">
+                        Our Architectural Ledger system ensures your institutional application is processed with absolute precision and security.
+                    </div>
+
+                    <div class="ls-step-list">
+                        <div class="ls-step-item active" id="step-1-indicator">
+                            <div class="ls-step-number">1</div>
+                            <div class="ls-step-body">
+                                <div class="ls-step-label">Loan Specifications</div>
+                                <div class="ls-step-sublabel">Terms, volume, and intent</div>
+                            </div>
+                        </div>
+                        <div class="ls-step-item" id="step-2-indicator">
+                            <div class="ls-step-number">2</div>
+                            <div class="ls-step-body">
+                                <div class="ls-step-label">Documentation</div>
+                                <div class="ls-step-sublabel">Identity and income verification</div>
+                            </div>
+                        </div>
+                        <div class="ls-step-item" id="step-3-indicator">
+                            <div class="ls-step-number">3</div>
+                            <div class="ls-step-body">
+                                <div class="ls-step-label">Review & Submit</div>
+                                <div class="ls-step-sublabel">Confirmation of ledger entries</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ls-apply-sidebar-footer">
+                        <i data-lucide="shield" style="width:14px;height:14px;"></i>
+                        AES-256 ENCRYPTED ENVIRONMENT
+                    </div>
+                </aside>
+
+                <!-- Form Area -->
+                <div style="flex:1;display:flex;flex-direction:column;">
+                    <form id="loanForm" asp-action="Create" asp-controller="Loan" method="post" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+
+                        <div class="ls-apply-main">
+
+                            <!-- ── STEP 1: Loan Specifications ── -->
+                            <div id="step-1" class="ls-step-content">
+                                <div class="ls-section-heading">
+                                    <h2>1. Loan Specifications</h2>
+                                    <span class="ls-required-badge">Required</span>
+                                </div>
+
+                                <!-- Amount -->
+                                <div class="ls-mb-4">
+                                    <div class="ls-field-label">Requested Loan Amount (INR)</div>
+                                    <div class="ls-amount-wrap">
+                                        <span class="ls-amount-prefix">₹</span>
+                                        <input type="number"
+                                               id="amount"
+                                               name="Amount"
+                                               class="ls-amount-input"
+                                               placeholder="0.00"
+                                               min="10000"
+                                               max="25000000"
+                                               step="100"
+                                               asp-for="Amount" />
+                                    </div>
+                                    <div class="ls-amount-hint">
+                                        <span>Min: ₹10,000</span>
+                                        <span>Max: ₹2,50,00,000</span>
+                                    </div>
+                                    <span asp-validation-for="Amount" class="ls-field-error"></span>
+                                </div>
+
+                                <!-- Loan Term + Loan Purpose -->
+                                <div class="ls-grid-2" style="gap:1.25rem;margin-top:1.25rem;">
+                                    <div>
+                                        <div class="ls-field-label">Loan Term</div>
+                                        <select name="TermInMonths" class="ls-select-field" asp-for="TermInMonths">
+                                            <option value="3">3 Months</option>
+                                            <option value="6">6 Months</option>
+                                            <option value="12" selected>12 Months</option>
+                                            <option value="24">24 Months</option>
+                                            <option value="36">36 Months</option>
+                                            <option value="60">60 Months</option>
+                                            <option value="84">84 Months</option>
+                                            <option value="120">120 Months</option>
+                                            <option value="180">180 Months</option>
+                                            <option value="240">240 Months</option>
+                                        </select>
+                                        <span asp-validation-for="TermInMonths" class="ls-field-error"></span>
+                                    </div>
+                                    <div>
+                                        <div class="ls-field-label">Loan Purpose</div>
+                                        <select name="LoanType" class="ls-select-field" asp-for="LoanType">
+                                            <option value="personal">Personal</option>
+                                            <option value="vehicle">Vehicle</option>
+                                            <option value="home">Home / Mortgage</option>
+                                            <option value="education">Education</option>
+                                            <option value="business">Business Expansion</option>
+                                            <option value="working_capital">Working Capital</option>
+                                            <option value="esg">ESG Infrastructure</option>
+                                        </select>
+                                        <span asp-validation-for="LoanType" class="ls-field-error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Interest Rate (read-only, computed server-side or prefilled) -->
+                                <div style="margin-top:1.25rem;">
+                                    <div class="ls-field-label">Purpose / Description</div>
+                                    <textarea name="Purpose"
+                                              asp-for="Purpose"
+                                              rows="3"
+                                              placeholder="Briefly describe the purpose of this loan..."
+                                              style="width:100%;padding:.7rem 1rem;font-size:.85rem;color:#0f172a;border:1.5px solid #e5e7eb;border-radius:.5rem;resize:vertical;outline:none;font-family:inherit;transition:border-color .2s;"
+                                              onfocus="this.style.borderColor='#1e3a5f'"
+                                              onblur="this.style.borderColor='#e5e7eb'"></textarea>
+                                    <span asp-validation-for="Purpose" class="ls-field-error"></span>
+                                </div>
+                            </div>
+
+                            <hr class="ls-section-divider" />
+
+                            <!-- ── STEP 2: Documentation ── -->
+                            <div id="step-2" class="ls-step-content">
+                                <div class="ls-section-heading">
+                                    <h2>2. Documentation</h2>
+                                    <span class="ls-upload-meta">PDF, PNG, or JPG (Max 10MB)</span>
+                                </div>
+
+                                <div class="ls-upload-grid">
+                                    <!-- Government ID -->
+                                    <label class="ls-upload-card" for="govId">
+                                        <div class="ls-upload-icon">
+                                            <i data-lucide="badge-check" style="width:32px;height:32px;"></i>
+                                        </div>
+                                        <div class="ls-upload-title">Government Issued ID</div>
+                                        <div class="ls-upload-sub">Passport or Driver's License</div>
+                                        <span class="ls-upload-cta">Click to Upload</span>
+                                        <input type="file" id="govId" name="GovernmentId"
+                                               accept=".pdf,.png,.jpg,.jpeg"
+                                               style="display:none;"
+                                               onchange="showFileName(this,'govId-name')" />
+                                        <span id="govId-name" style="font-size:.7rem;color:#1e3a5f;font-weight:600;margin-top:.25rem;"></span>
+                                    </label>
+
+                                    <!-- Proof of Income -->
+                                    <label class="ls-upload-card" for="proofIncome">
+                                        <div class="ls-upload-icon">
+                                            <i data-lucide="landmark" style="width:32px;height:32px;"></i>
+                                        </div>
+                                        <div class="ls-upload-title">Proof of Income</div>
+                                        <div class="ls-upload-sub">Tax returns or Bank statements</div>
+                                        <span class="ls-upload-cta">Click to Upload</span>
+                                        <input type="file" id="proofIncome" name="ProofOfIncome"
+                                               accept=".pdf,.png,.jpg,.jpeg"
+                                               style="display:none;"
+                                               onchange="showFileName(this,'income-name')" />
+                                        <span id="income-name" style="font-size:.7rem;color:#1e3a5f;font-weight:600;margin-top:.25rem;"></span>
+                                    </label>
+                                </div>
+
+                                <!-- Disclaimer -->
+                                <div class="ls-disclaimer">
+                                    <i data-lucide="info" style="width:16px;height:16px;color:#6b7280;flex-shrink:0;margin-top:.1rem;"></i>
+                                    <p>
+                                        By continuing, you acknowledge that LoanSphere will perform a standard credit check as part of our
+                                        institutional ledger verification process. Your data is protected by industry-standard encryption protocols.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <hr class="ls-section-divider" />
+
+                            <!-- ── STEP 3: Review & Submit ── -->
+                            <div id="step-3" class="ls-step-content">
+                                <div class="ls-section-heading">
+                                    <h2>3. Review &amp; Submit</h2>
+                                    <span class="ls-required-badge">Final Step</span>
+                                </div>
+
+                                <!-- Summary Card -->
+                                <div class="ls-card" style="padding:1.5rem;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:.75rem;">
+                                    <div class="ls-table-title ls-mb-4" style="font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:#6b7280;font-weight:700;">Application Summary</div>
+
+                                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem 2rem;">
+                                        <div>
+                                            <div style="font-size:.7rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Loan Amount</div>
+                                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;" id="review-amount">₹ —</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size:.7rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Loan Term</div>
+                                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;" id="review-term">—</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size:.7rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Loan Type</div>
+                                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;" id="review-type">—</div>
+                                        </div>
+                                        <div>
+                                            <div style="font-size:.7rem;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Purpose</div>
+                                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;" id="review-purpose">—</div>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #e5e7eb;">
+                                        <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:#0d6f4f;font-weight:600;">
+                                            <i data-lucide="check-circle" style="width:14px;height:14px;"></i>
+                                            Documents uploaded and verified
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Terms checkbox -->
+                                <div style="margin-top:1.25rem;display:flex;align-items:flex-start;gap:.6rem;">
+                                    <input type="checkbox" id="agreeTerms" name="AgreeTerms" required
+                                           style="margin-top:.15rem;accent-color:#1e3a5f;width:14px;height:14px;" />
+                                    <label for="agreeTerms" style="font-size:.78rem;color:#6b7280;line-height:1.6;cursor:pointer;">
+                                        I confirm that all information provided is accurate and I agree to LoanSphere's
+                                        <a href="#" style="color:#1e3a5f;font-weight:600;">Terms of Service</a> and
+                                        <a href="#" style="color:#1e3a5f;font-weight:600;">Privacy Policy</a>.
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- ── Footer Actions ── -->
+                        <div class="ls-apply-footer">
+                            <a href="/Dashboard" class="ls-btn-cancel">
+                                <i data-lucide="arrow-left" style="width:13px;height:13px;"></i>
+                                Cancel Application
+                            </a>
+                            <button type="submit" class="ls-btn-continue">
+                                Submit Application
+                                <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    lucide.createIcons();
+
+    // Show file name after upload
+    function showFileName(input, targetId) {
+        const el = document.getElementById(targetId);
+        if (input.files && input.files[0]) {
+            el.textContent = input.files[0].name;
+        }
+    }
+
+    // Live review summary
+    const amountInput  = document.getElementById('amount');
+    const termSelect   = document.querySelector('select[name="TermInMonths"]');
+    const typeSelect   = document.querySelector('select[name="LoanType"]');
+    const purposeInput = document.querySelector('textarea[name="Purpose"]');
+
+    function updateReview() {
+        const amt = parseFloat(amountInput.value);
+        document.getElementById('review-amount').textContent =
+            amt ? '₹ ' + amt.toLocaleString('en-IN', { minimumFractionDigits: 2 }) : '₹ —';
+        document.getElementById('review-term').textContent =
+            termSelect.value ? termSelect.value + ' Months' : '—';
+        document.getElementById('review-type').textContent =
+            typeSelect.options[typeSelect.selectedIndex]?.text || '—';
+        document.getElementById('review-purpose').textContent =
+            purposeInput.value.trim() || '—';
+    }
+
+    [amountInput, termSelect, typeSelect, purposeInput].forEach(el => {
+        el.addEventListener('input', updateReview);
+        el.addEventListener('change', updateReview);
+    });
+
+    updateReview();
+</script>
+</body>
+</html>

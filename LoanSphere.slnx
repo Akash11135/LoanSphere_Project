@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/Backend/">
-    <Project Path="LoanAuth/LoanAuth.csproj" />
+    <Project Path="LoanAuth/LoanAuth/LoanAuth.csproj" />
     <Project Path="LoanManagement/LoanManagement.csproj" />
   </Folder>
   <Folder Name="/Frontend/">

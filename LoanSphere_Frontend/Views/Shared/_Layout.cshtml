@@ -9,115 +9,18 @@
     <link rel="stylesheet" href="~/LoanSphere_Frontend.styles.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
-<style>
-    body{
-        background-color: #F7FAFC;
-    }
-    header{
-        display:flex;
-        justify-content:center;
-        align-items:center;
-    }
-    .nav-container{
-        border-bottom:1px solid lightgray;
-        height:84px;
-        display:flex;
-        justify-content:space-between;
-        padding:20px 48px;
-        width:80%;
-        /* align-items:center; */
-    }
-    .nav-title{
-        font-size:20px;
-        font-weight:bold;
-        color:#004A7C;
-    }
-    
-    .nav-links ul{
-        list-style:none;
-        display:flex;
-        color: #475569;
-       
-    }
-    .nav-links li{
-        margin-right:1rem;
-        cursor:pointer;
-        font-weight:500;
-        padding:0.25rem
-    }
 
-    .nav-links li:hover {
-            color: #004A7C;
-            border-bottom:2px solid #004A7C;
-            transition:0.07s ease-in-out;
-    }
 
-    .nav-links a{
-        text-decoration:none;
-    }
-
-    .nav-actions{
-      
-        padding:0.25rem;
-        width:30%;
-        display:flex;
-        justify-content:  space-evenly;
-    }
-
-   .nav-actions .btns {
-        /* margin-top: 2rem; */
-        /* padding: 12px 24px; */
-        background: #003358;
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        min-width:7rem;
-    }
-
-    /* Hover effect */
-    .nav-actions .btns:hover {
-        background: #005A8D;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(0, 51, 88, 0.2);
-    }
-
-   
-</style>
 <body>
-    <header>
-        <nav class="nav-container">
-            <div class="nav-title">
-                LoanSphere
-            </div>
-            <div class="nav-links">
-                <ul>
-                    <li><a>Products</a></li>
-                    <li><a>Market Rates</a></li>
-                    <li><a>About Us</a></li>
-                    <li><a>Contacts</a></li>
-                </ul>
-            </div>
-            <div class="nav-actions">
-                <button class="btns btn-login" asp-controller="Dashboard" asp-action="Index">Log In</button>
-                <button class="btns btn-apply">Apply Now</button>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
+        <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - LoanSphere_Frontend - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+   
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

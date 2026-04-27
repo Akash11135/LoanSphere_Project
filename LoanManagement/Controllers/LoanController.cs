@@ -17,41 +17,35 @@ namespace LoanManagement.Controllers
         }
 
 
-        [HttpGet("getall")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("getall/{userId}")]
+        public async Task<IActionResult> GetAll(int userId)
         {
-            var resp = await _loanService.GetAllService();
-            if (resp == null)
+            var respData = await _loanService.GetAllService(userId);
+            
+            if (respData == null)
             {
-                return Ok(new { mess = $"Unable to find all Loans BEC" });
+                return Ok(new ApiResponse<Object>(404, $"No Loan data found for {userId} backend.",respData));
             }
-            return Ok(resp);
+            return Ok(new ApiResponse<Object>(200, "Loan Data found successfully.", respData));
         }
 
-        [HttpGet("getbyid/{id}")]
-        public async Task<IActionResult> GetById(int id)
+
+        [HttpGet("getloanbyid/{userId}/{loanId}")]
+        public async Task<IActionResult> GetById(int userId , int loanId)
         {
-            var resp = await _loanService.GetByIdService(id);
-            if (resp == null)
-            {
-                return Ok(new { mess = $"Loan with id:{id} not found BEC." });
-            }
-            return Ok(resp);
+            var resp = await _loanService.GetByIdService(userId , loanId);
+         
+            return Ok(new ApiResponse<Object>(200, resp.Mess ,resp.loan));
         }
 
-        [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update(int id, Loan loan)
+
+        [HttpPut("update/{userId}/{loanId}")]
+        public async Task<IActionResult> Update(int userId, int loanId, UpdateLoanDto loan)
         {
-            if (id != loan.LoanId)
-            {
-                return BadRequest("Id not found BEC");
-            }
-            var resp = await _loanService.UpdateService(id, loan);
-            if (resp == null)
-            {
-                return Ok(new { mess = $"Loan with id:{id} not found BEC." });
-            }
-            return Ok(resp);
+  
+            var resp = await _loanService.UpdateService(userId, loanId, loan);
+                return Ok(new ApiResponse<Object>(200, resp.Mess, resp.loan));
+         
         }
 
         [HttpPost("create")]
@@ -61,20 +55,31 @@ namespace LoanManagement.Controllers
 
             if (resp == null)
             {
-                return Ok(new { mess = $"Loan not created BEC." });
+                return Ok(new ApiResponse<Object> (500, $"Loan not created backend." ,resp ));
             }
-            return Ok(resp);
+            return Ok(new ApiResponse<Object>(200, "Created Loan successfully", resp));
         }
 
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("delete/{userId}/{loanId}")]
+        public async Task<IActionResult> Delete(int userId,int loanId)
         {
-            var res = await _loanService.DeleteService(id);
+            var resp = await _loanService.DeleteService(userId , loanId);
+            if (resp == null)
+            {
+                return Ok(new ApiResponse<Object>(500, "Unable to Delete", resp));
+            }
+            return Ok(new ApiResponse<Object>(200, "Deleted Successfully", resp));
+        }
+
+        [HttpGet("dashboard/{userId}")]
+        public async Task<IActionResult> DashboardContent(int userId)
+        {
+            var res = await _loanService.DashBoardService(userId);
             if (res == null)
             {
-                return Ok(new { mess = "Unable to delete" });
+                return Ok(new ApiResponse<Object>(500, "Unable to get dashboard backedn.", res));
             }
-            return Ok(res);
+            return Ok(new ApiResponse<Object>(200, "Dashboard details fetched successfully.",res));
         }
     }
 }

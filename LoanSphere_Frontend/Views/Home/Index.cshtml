@@ -1,58 +1,241 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
 }
+
+@* <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"> *@
 <style>
-    .main-container{
-        margin-top:6rem;
+    html {
+        scroll-behavior: smooth;
     }
 
-    .title-container h1{
-        
-        font-size:72px;
-        color:#003358;
-        font-weight:bolder;
+    body {
+        margin: 0;
+        background: #F7FAFC;
+        scroll-padding-top: 100px;
+       
     }
 
-    .title-container p{
-        max-width:672px;
+    .main-container {
+        max-width: 1280px;
+        margin: auto;
+        padding: 0 2rem;
+    }
+
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        background: #F7FAFC;
+        backdrop-filter: blur(10px);
+    }
+
+    .nav-container {
+        width: 100%;
+        height: 84px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 20px;
+        border-bottom: 1px solid #d7dde3;
+        transition: .3s;
+    }
+
+        .nav-container.scrolled {
+            background: rgba(247,250,252,.95);
+            box-shadow: 0 8px 24px rgba(0,0,0,.05);
+        }
+
+    .nav-title {
+        font-size: 34px;
+        font-weight: 700;
+        color: #004A7C;
+    }
+
+    .nav-links ul {
+        list-style: none;
+        display: flex;
+        gap: 2rem;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #475569;
+        font-weight: 500;
+        position: relative;
+    }
+
+        .nav-links a:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            height: 2px;
+            width: 0;
+            background: #004A7C;
+            transition: .3s;
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+    .nav-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btns {
+        background: #003358;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: .8rem 1.4rem;
+        font-weight: 600;
+    }
+
+        .btns a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .btns:hover {
+            background: #005A8D;
+            transform: translateY(-2px);
+        }
+
+    .title-container {
+        padding: 4rem 0 2rem;
+        animation: fadeUp 1s ease;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(25px)
+        }
+
+        to {
+            opacity: 1;
+            transform: none
+        }
+    }
+
+    .title-container h1 {
+        font-size: 78px;
+        line-height: 1.05;
+        font-weight: 800;
+        color: #003358;
+        margin: .25rem 0;
+    }
+
+    .title-container p {
+        max-width: 700px;
+        font-size: 1.25rem;
         color: #42474F;
-        
+        margin-top: 1rem;
     }
 
+    .section-block {
+        padding-top: 5rem;
+        scroll-margin-top: 110px;
+    }
+
+    /* FIXED CARD GRID */
     .services-container {
         margin-top: 3rem;
-        width:100%;
-        display:flex;
-        justify-content:space-evenly;
-        align-items:center;
-        flex-wrap:wrap;
-        gap:2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(340px,1fr));
+        gap: 2rem;
     }
 
     .service-card {
-        width: 362px;
-        height: 411px;
-        border-radius: 20px;
-        background-color: #F5F7F9;
+        background: #F5F7F9;
+        border-radius: 22px;
         padding: 32px;
+        height: 420px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-        transform: translateY(0);
-        cursor: pointer;
+        transition: .35s;
     }
 
-        /* Hover animation (lift + smooth return) */
         .service-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-10px);
+            box-shadow: 0 18px 40px rgba(0,0,0,.08);
         }
 
-    /* Icon container (like image) */
     .icon-box {
-        width: 48px;
-        height: 48px;
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: #E9EEF3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .service-card h4 {
+        margin-top: 1rem;
+        font-size: 32px;
+        color: #003358;
+    }
+
+    .service-card p {
+        color: #42474F;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #d8dde2;
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .learn-more {
+        border: none;
+        background: none;
+        font-weight: 600;
+        color: #003358;
+    }
+
+    .feature-section {
+        margin-top: 5rem;
+        background: #F5F7F9;
+        border-radius: 30px;
+        padding: 60px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4rem;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .feature-text {
+        flex: 1;
+        min-width: 320px;
+    }
+
+        .feature-text h2 {
+            font-size: 42px;
+            color: #003358;
+        }
+
+    .feature-item {
+        display: flex;
+        gap: 14px;
+        margin-top: 1.2rem;
+    }
+
+    .feature-icon {
+        width: 40px;
+        height: 40px;
         border-radius: 12px;
         background: #E9EEF3;
         display: flex;
@@ -60,357 +243,284 @@
         justify-content: center;
     }
 
-        .icon-box i {
-            color: #003358;
-            font-size: 20px;
-        }
-
-    .service-card h4 {
-        color: #003358;
-        font-weight: 600;
-        margin-top: 20px;
-    }
-
-    .service-card p {
-        color: #42474F;
-        border-bottom: 1px solid #E0E4E8;
-        padding-bottom: 2rem;
-        margin-top: 10px;
-    }
-
-    /* Bottom section */
-    .card-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    /* Learn more button */
-    .learn-more {
-        background: none;
-        border: none;
-        color: #003358;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-        /* Arrow animation */
-        .learn-more span {
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-
-    /* Move arrow on hover */
-    .service-card:hover .learn-more span {
-        transform: translateX(6px);
-    }
-
-    .feature-section {
-        margin-top: 6rem;
-        background: #F5F7F9;
-        border-radius: 30px;
-        padding: 60px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 3rem;
-        flex-wrap: wrap;
-    }
-
-    /* Left content */
-    .feature-text {
-        flex: 1;
-        min-width: 300px;
-    }
-
-        .feature-text h2 {
-            font-size: 36px;
-            color: #003358;
-            font-weight: 700;
-        }
-
-        .feature-text p {
-            margin-top: 1rem;
-            color: #42474F;
-            max-width: 500px;
-        }
-
-    /* Feature points */
-    .feature-item {
-        display: flex;
-        gap: 12px;
-        margin-top: 20px;
-    }
-
-    .feature-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        background: #E9EEF3;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #006A6A;
-    }
-
-    /* Right image */
+    /* FIXED IMAGES */
     .feature-image {
-        flex: 1;
-        min-width: 300px;
+        max-width: 540px;
+        width: 100%;
+        margin: auto;
         position: relative;
     }
 
         .feature-image img {
             width: 100%;
-            border-radius: 25px;
+            height: 420px;
             object-fit: cover;
+            border-radius: 28px;
         }
 
-    /* Floating stat card */
     .stat-card {
         position: absolute;
-        bottom: -20px;
         left: 30px;
-        background: white;
+        bottom: -20px;
+        background: #fff;
         padding: 20px 30px;
         border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 12px 35px rgba(0,0,0,.12);
     }
 
-        .stat-card h3 {
-            margin: 0;
-            color: #003358;
-            font-weight: 700;
-        }
-
-        .stat-card span {
-            font-size: 12px;
-            color: #777;
-        }
-
-    .feature-image img {
-        transition: transform 0.4s ease;
-    }
-
-    .feature-image:hover img {
-        transform: scale(1.03);
-    }
     .add-loan-btn {
         margin-top: 2rem;
         padding: 12px 24px;
-        background: #003358;
-        color: #ffffff;
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
+        background: #003358;
+        color: #fff;
         font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
     }
 
-        /* Hover effect */
-        .add-loan-btn:hover {
-            background: #005A8D;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 51, 88, 0.2);
+    footer {
+        margin-top: 5rem;
+        padding: 2rem 0;
+    }
+
+    @@media(max-width:900px) {
+        .title-container h1 {
+            font-size: 54px;
         }
+
+        .feature-image img {
+            height: 300px;
+        }
+    }
 </style>
+
 <div class="main-container">
-    <div class="title-container">
-        <h8 style="color:#006A6A">INSTITUTIONAL CAPITAL</h8>
-        <h1>
-            The Architectural Ledger of
-        </h1>
-        <h1 style="color:#87BAF3">
-            Stratigic Finance
-        </h1>
-        <p style="width:">
-            Precision-engineered credit facilities designed for institutional growth. Explore our tiered capital products curated for the modern architectural economy.
-        </p>
-    </div>
-    <div class="services-container">
-        <div class="service-card">
+    <header>
+        <nav class="nav-container">
+            <div class="nav-title">LoanSphere</div>
 
-            <div class="icon-box">
-                <i class="fa-solid fa-building"></i>
+            <div class="nav-links">
+                <ul>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#rates">Market Rates</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contacts</a></li>
+                </ul>
             </div>
 
-            <h4>Commercial Mortgages</h4>
-
-            <p>
-                Tier-1 real estate acquisitions and refinancing for high-volume urban developments and logistics hubs.
-            </p>
-
-            <div class="card-footer">
-                <span style="color:#006A6A; font-size:14px">
-                    LTV up to 80%
-                </span>
-
-                <button class="learn-more">
-                    Learn More <span>→</span>
+            <div class="nav-actions">
+                <button class="btns">
+                    <a asp-controller="Auth" asp-action="Login">Log In</a>
+                </button>
+                <button class="btns">
+                    <a asp-action="Index" asp-controller="Dashboard">Apply Now</a>
                 </button>
             </div>
-        </div>
+        </nav>
+    </header>
 
-          <div class="service-card">
+    <main>
 
-            <div class="icon-box">
-                <i class="fa-solid fa-building"></i>
+        <div class="title-container">
+            <div style="color:#006A6A;font-weight:600;">
+                INSTITUTIONAL CAPITAL
             </div>
 
-            <h4>Commercial Mortgages</h4>
+            <h1>The Architectural Ledger of</h1>
+            <h1 style="color:#87BAF3">Strategic Finance</h1>
 
             <p>
-                Tier-1 real estate acquisitions and refinancing for high-volume urban developments and logistics hubs.
+                Precision-engineered credit facilities designed for institutional growth. Explore bespoke lending structures, dynamic risk pricing, treasury-backed products, and intelligent repayment ecosystems tailored for modern institutional borrowers.
             </p>
-
-            <div class="card-footer">
-                <span style="color:#006A6A; font-size:14px">
-                    LTV up to 80%
-                </span>
-
-                <button class="learn-more">
-                    Learn More <span>→</span>
-                </button>
-            </div>
         </div>
-        <div class="service-card">
 
-            <div class="icon-box">
-                <i class="fa-solid fa-building"></i>
+        <section id="products" class="section-block">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2rem 0 1rem;">
+                <div class="service-card" style="height:auto;padding:1.5rem;"><h5>₹25Cr+</h5><small>Capital Disbursed</small></div>
+                <div class="service-card" style="height:auto;padding:1.5rem;"><h5>18,000+</h5><small>Borrowers Served</small></div>
+                <div class="service-card" style="height:auto;padding:1.5rem;"><h5>98.2%</h5><small>Repayment Success</small></div>
+                <div class="service-card" style="height:auto;padding:1.5rem;"><h5>48 Hrs</h5><small>Avg Approval</small></div>
             </div>
+            <div class="services-container">
 
-            <h4>Commercial Mortgages</h4>
-
-            <p>
-                Tier-1 real estate acquisitions and refinancing for high-volume urban developments and logistics hubs.
-            </p>
-
-            <div class="card-footer">
-                <span style="color:#006A6A; font-size:14px">
-                    LTV up to 80%
-                </span>
-
-                <button class="learn-more">
-                    Learn More <span>→</span>
-                </button>
-            </div>
-        </div>
-        <div class="service-card">
-
-            <div class="icon-box">
-                <i class="fa-solid fa-building"></i>
-            </div>
-
-            <h4>Commercial Mortgages</h4>
-
-            <p>
-                Tier-1 real estate acquisitions and refinancing for high-volume urban developments and logistics hubs.
-            </p>
-
-            <div class="card-footer">
-                <span style="color:#006A6A; font-size:14px">
-                    LTV up to 80%
-                </span>
-
-                <button class="learn-more">
-                    Learn More <span>→</span>
-                </button>
-            </div>
-        </div>
-        <div class="service-card">
-
-            <div class="icon-box">
-                <i class="fa-solid fa-building"></i>
-            </div>
-
-            <h4>Commercial Mortgages</h4>
-
-            <p>
-                Tier-1 real estate acquisitions and refinancing for high-volume urban developments and logistics hubs.
-            </p>
-
-            <div class="card-footer">
-                <span style="color:#006A6A; font-size:14px">
-                    LTV up to 80%
-                </span>
-
-                <button class="learn-more">
-                    Learn More <span>→</span>
-                </button>
-            </div>
-        </div>
-        <div class="service-card">
-
-            <div class="icon-box">
-                <i class="fa-solid fa-building"></i>
-            </div>
-
-            <h4>Commercial Mortgages</h4>
-
-            <p>
-                Tier-1 real estate acquisitions and refinancing for high-volume urban developments and logistics hubs.
-            </p>
-
-            <div class="card-footer">
-                <span style="color:#006A6A; font-size:14px">
-                    LTV up to 80%
-                </span>
-
-                <button class="learn-more">
-                    Learn More <span>→</span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="feature-section">
-
-        <!-- LEFT SIDE -->
-        <div class="feature-text">
-            <h2>The Architectural Edge in Capital Markets</h2>
-
-            <p>
-                Beyond the numbers, we provide the structural integrity your project requires.
-                Our ledger system integrates real-time risk analytics with institutional-grade underwriting.
-            </p>
-
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fa-solid fa-check"></i>
+                <div class="service-card">
+                    <div class="icon-box">🏢</div>
+                    <h4>Commercial Mortgages</h4>
+                    <p>Acquisition and refinancing for institutional real estate portfolios.</p>
+                    <div class="card-footer">
+                        <span>LTV up to 80%</span>
+                        <button class="learn-more">Learn More →</button>
+                    </div>
                 </div>
-                <div>
-                    <strong>Absolute Transparency</strong>
-                    <p style="margin:0; font-size:14px;">
-                        No hidden fees. Every term is etched in the architectural ledger.
+
+                <div class="service-card">
+                    <div class="icon-box">🎓</div>
+                    <h4>Education Financing</h4>
+                    <p>Deferred repayment student funding with flexible structures.</p>
+                    <div class="card-footer">
+                        <span>APR 10.5%</span>
+                        <button class="learn-more">Learn More →</button>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box">💼</div>
+                    <h4>Business Credit</h4>
+                    <p>Working capital and expansion credit for growth-stage businesses.</p>
+                    <div class="card-footer">
+                        <span>Up to ₹5Cr</span>
+                        <button class="learn-more">Learn More →</button>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box">🏠</div>
+                    <h4>Housing Loans</h4>
+                    <p>Long-term structured home finance with lower risk pricing.</p>
+                    <div class="card-footer">
+                        <span>7.25% onward</span>
+                        <button class="learn-more">Learn More →</button>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box">📈</div>
+                    <h4>Growth Capital</h4>
+                    <p>Institutional venture financing for scale-stage companies.</p>
+                    <div class="card-footer">
+                        <span>Structured Terms</span>
+                        <button class="learn-more">Learn More →</button>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="icon-box">🏛</div>
+                    <h4>Infrastructure Debt</h4>
+                    <p>Project financing backed by syndication partners.</p>
+                    <div class="card-footer">
+                        <span>Custom Syndication</span>
+                        <button class="learn-more">Learn More →</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="rates" class="section-block">
+            <div class="feature-section">
+                <div class="feature-text">
+                    <h2>Current Market Rates</h2>
+                    <p style="margin-top:1rem;color:#475569;max-width:560px;">Real-time indicative lending benchmarks across institutional segments, updated against prevailing market liquidity and risk conditions.</p>
+                    <div class="feature-item">
+                        <div class="feature-icon">%</div>
+                        <div><strong>Commercial Mortgage</strong><br />7.25%-8.1%</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">%</div>
+                        <div><strong>Education Lending</strong><br />10.5%-12%</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">%</div>
+                        <div><strong>Business Credit</strong><br />9.2%-11.4%</div>
+                    </div>
+                </div>
+                <div class="feature-image">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1000">
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section-block">
+            <div class="feature-section">
+                <div class="feature-text">
+                    <h2>The Architectural Edge in Capital Markets</h2>
+                    <p style="color:#475569;max-width:620px;">From underwriting intelligence to portfolio servicing, LoanSphere powers modern credit infrastructure.</p>
+                    <p>
+                        Institutional-grade underwriting with real time risk intelligence.
                     </p>
+                    <div class="feature-item">
+                        <div class="feature-icon">✓</div>
+                        <div><strong>Transparency</strong></div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">↗</div>
+                        <div><strong>Rapid Deployment</strong></div>
+                    </div>
+                    <button class="add-loan-btn">Apply New Loan</button>
                 </div>
-            </div>
 
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </div>
-                <div>
-                    <strong>Rapid Deployment</strong>
-                    <p style="margin:0; font-size:14px;">
-                        Institutional credit committee decisions within 48 business hours.
-                    </p>
+                <div class="feature-image">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1000">
+                    <div class="stat-card">
+                        <h3>$4.2B</h3>
+                        <span>Capital Deployed</span>
+                    </div>
                 </div>
             </div>
-            <button class="add-loan-btn">Apply New Loan</button>
+        </section>
+
+        <section id="contact" class="section-block">
+            <div class="feature-section">
+                <div class="feature-text">
+                    <h2>Contact LoanSphere</h2>
+                    <p style="color:#475569;max-width:560px;">Connect with lending advisors, repayment specialists, or institutional relationship managers.</p>
+                    <div class="feature-item">
+                        <div class="feature-icon">📍</div>
+                        <div>Sector 17 Chandigarh</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">☎</div>
+                        <div>+91 9876543210</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✉</div>
+                        <div>support@loansphere.com</div>
+                    </div>
+                    <button class="add-loan-btn">Talk To Advisor</button>
+                </div>
+
+                <div class="feature-image">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1000">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-top text-muted">
+        <div class="container">
+            © 2026 LoanSphere • Institutional Credit • Treasury Lending • Digital Servicing
         </div>
-        <!-- RIGHT SIDE -->
-        <div class="feature-image">
-            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_AuLOjmEYffMecuVaK0XTq1q72cWon8zko0mOfE5iy1yAm086WhwCx_u-PEt7KIFBRBMGRj7OqNM2ERP5R1rYzZup0SwDjGIS-coIv4-7tMTesc8gW23UJPkIyXCyZTzoDqdwpbJSmt3E8BcgNCCG5H3OcPaHyB-2NJt8B9KmRUomg9UmytDdO0Enq9jILP-EKu6Muog5ewwqqpbdZNiEtL2O7Z5S6I69eJrH6dN3y0rAGeJ0-K0HzYd24oESaz6qN3eifzXHXR8" />
-
-            <div class="stat-card">
-                <h3>$4.2B</h3>
-                <span>CAPITAL DEPLOYED 2023</span>
-            </div>
-        </div>
-
-    </div>
+    </footer>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded',function(){
+
+    const nav=document.querySelector('.nav-container');
+    window.addEventListener('scroll',()=>{
+    if(window.scrollY>30){
+    nav.classList.add('scrolled');
+    }else{
+    nav.classList.remove('scrolled');
+    }
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link=>{
+    link.addEventListener('click',function(e){
+    e.preventDefault();
+    const target=document.querySelector(
+    this.getAttribute('href')
+    );
+    if(target){
+    target.scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+    });
+    }
+    });
+    });
+
+    });
+</script>
+```

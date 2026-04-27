@@ -1,0 +1,214 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - LoanSphere</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+
+        
+        .hero {
+            background: linear-gradient(135deg,#0f172a,#1e3a5f);
+            color: white;
+            padding: 3rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card, .info-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 1.5rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .team-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+<body class="ls-app">
+    <div class="ls-layout">
+
+        <div class="ls-sidebar">
+            <div class="ls-sidebar-brand">
+                <span class="ls-brand-name">LoanSphere</span>
+            </div>
+            <a href="/Dashboard" class="ls-nav-item">Dashboard</a>
+            <a asp-action="ContactUs" asp-controller="Home" class="ls-nav-item active">About Us</a>
+            <a asp-action="AboutUs" asp-controller="Home" class="ls-nav-item">Contact</a>
+        </div>
+
+        <div style="display:flex;flex-direction:column;margin-left:9rem;width:100%;">
+
+            <header class="ls-topbar">
+                <span class="ls-page-title">About LoanSphere</span>
+            </header>
+
+            <main class="ls-main">
+
+                <div class="hero">
+                    <h6 style="letter-spacing:2px;opacity:.8;">TRUSTED DIGITAL LENDING</h6>
+                    <h1 style="font-size:3rem;font-weight:700;">
+                        Empowering Smarter Borrowing
+                    </h1>
+                    <p style="max-width:700px;font-size:1.1rem;color:#cbd5e1;">
+                        LoanSphere is a modern loan management platform built to simplify lending,
+                        repayments, compliance, and financial access through secure digital experiences.
+                    </p>
+                </div>
+
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <h6>Loans Processed</h6>
+                        <h2>₹25Cr+</h2>
+                        <p>Disbursed across segments</p>
+                    </div>
+                    <div class="metric-card">
+                        <h6>Customers Served</h6>
+                        <h2>18,000+</h2>
+                        <p>Retail and business borrowers</p>
+                    </div>
+                    <div class="metric-card">
+                        <h6>Approval Speed</h6>
+                        <h2>48 hrs</h2>
+                        <p>Average turnaround</p>
+                    </div>
+                    <div class="metric-card">
+                        <h6>Repayment Success</h6>
+                        <h2>98.2%</h2>
+                        <p>Strong portfolio quality</p>
+                    </div>
+                </div>
+
+                <h3 class="mb-4">What We Do</h3>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <i data-lucide="landmark"></i>
+                        <h5 class="mt-3">Digital Lending</h5>
+                        <p>Education, housing, business and personal loan lifecycle management.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <i data-lucide="shield-check"></i>
+                        <h5 class="mt-3">Compliance First</h5>
+                        <p>KYC, document verification, auditability and secure underwriting.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <i data-lucide="chart-column"></i>
+                        <h5 class="mt-3">Smart Analytics</h5>
+                        <p>EMI tracking, portfolio health and borrower risk intelligence.</p>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        <div class="info-card h-100">
+                            <h4>Our Mission</h4>
+                            <p>
+                                Make credit accessible, transparent and manageable through technology.
+                                We aim to remove friction from borrowing while maintaining trust and compliance.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="info-card h-100">
+                            <h4>Why LoanSphere</h4>
+                            <ul>
+                                <li>Fast digital approvals</li>
+                                <li>Transparent EMI schedules</li>
+                                <li>Secure borrower management</li>
+                                <li>Scalable lending infrastructure</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="mt-5 mb-4">Leadership Team</h3>
+
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="avatar">AP</div>
+                        <h5 class="mt-3">Akash Pandey</h5>
+                        <p>Founder & Product Lead</p>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="avatar">RM</div>
+                        <h5 class="mt-3">Riya Mehta</h5>
+                        <p>Risk & Credit Head</p>
+                    </div>
+
+                    <div class="team-card">
+                        <div class="avatar">VK</div>
+                        <h5 class="mt-3">Vikram Kumar</h5>
+                        <p>Operations Director</p>
+                    </div>
+                </div>
+
+                <div class="hero mt-5">
+                    <h2>Building the Future of Lending</h2>
+                    <p>
+                        From application to repayment, LoanSphere is designed for modern financial ecosystems.
+                    </p>
+                    <a class="ls-btn ls-btn-primary">Explore Products</a>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>lucide.createIcons()</script>
+</body>
+</html>
+
+

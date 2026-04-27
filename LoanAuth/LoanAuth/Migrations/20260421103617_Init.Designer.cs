@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanAuth.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260417101809_init")]
-    partial class init
+    [Migration("20260421103617_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

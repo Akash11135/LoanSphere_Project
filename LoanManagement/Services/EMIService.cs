@@ -41,7 +41,7 @@ namespace LoanManagement.Services
                 double principal = emi - interest;
 
                 balance -= principal;
-                dueDate = dueDate.AddMonths(1);
+                dueDate = dueDate.AddSeconds(1);
 
                 schedules.Add(new EMISchedule
                 {
