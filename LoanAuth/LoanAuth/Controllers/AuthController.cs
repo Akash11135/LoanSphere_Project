@@ -22,63 +22,79 @@ namespace LoanAuth.Controllers
         [HttpPost("register/customer")]
         public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerDto dto)
         {
-            var (success, message, _) = await _authService.RegisterCustomerAsync(dto);
+            var (success, message, userId) = await _authService.RegisterCustomerAsync(dto);
 
             if (!success)
                 return BadRequest(new { message });
 
-            // 🔥 CALL PROFILE SERVICE
-            await CreateProfile(dto.Email, dto.FullName, dto.Phone, "Customer");
+            await CreateProfile(userId!, dto.Email, dto.FullName, dto.Phone, "Customer");
 
-            return Ok(new { message });
+            var loginResult = await _authService.LoginAsync(new LoginDto
+            {
+                Email = dto.Email,
+                Password = dto.Password
+            });
+
+            return Ok(new { message, userId, role = "Customer", token = loginResult.Token });
         }
 
         // 🔹 ADMIN REGISTER
         [HttpPost("register/admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminDto dto)
         {
-            var (success, message, _) = await _authService.RegisterAdminAsync(dto);
+            var (success, message, userId) = await _authService.RegisterAdminAsync(dto);
 
             if (!success)
                 return BadRequest(new { message });
 
-            await CreateProfile(dto.Email, dto.FullName, dto.Phone, "Admin");
+            await CreateProfile(userId!, dto.Email, dto.FullName, dto.Phone, "Admin");
 
-            return Ok(new { message });
+            var loginResult = await _authService.LoginAsync(new LoginDto
+            {
+                Email = dto.Email,
+                Password = dto.Password
+            });
+
+            return Ok(new { message, userId, role = "Admin", token = loginResult.Token });
         }
 
         // 🔹 MANAGER REGISTER
         [HttpPost("register/manager")]
         public async Task<IActionResult> RegisterManager([FromBody] RegisterManagerDto dto)
         {
-            var (success, message, _) = await _authService.RegisterManagerAsync(dto);
+            var (success, message, userId) = await _authService.RegisterManagerAsync(dto);
 
             if (!success)
                 return BadRequest(new { message });
 
-            await CreateProfile(dto.Email, dto.FullName, dto.Phone, "Manager");
+            await CreateProfile(userId!, dto.Email, dto.FullName, dto.Phone, "Manager");
 
-            return Ok(new { message });
+            var loginResult = await _authService.LoginAsync(new LoginDto
+            {
+                Email = dto.Email,
+                Password = dto.Password
+            });
+
+            return Ok(new { message, userId, role = "Manager", token = loginResult.Token });
         }
 
         // 🔹 LOGIN (UNCHANGED)
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var (success, message, token) = await _authService.LoginAsync(dto);
+            var (success, message, token, userId, role, fullName, email) = await _authService.LoginAsync(dto);
             return success
-                ? Ok(new { message, token })
+                ? Ok(new { message, token, userId, role, fullName, email })
                 : Unauthorized(new { message });
         }
 
-        // 🔥 COMMON METHOD → CALL PROFILE SERVICE
-        private async Task CreateProfile(string email, string fullName, string phone, string role)
+        private async Task CreateProfile(string userId, string email, string fullName, string phone, string role)
         {
             try
             {
                 var profileDto = new
                 {
-                    UserId = email, // ⚠️ TEMP (better: actual user.Id)
+                    UserId = userId,
                     FullName = fullName,
                     Email = email,
                     Phone = phone,
@@ -86,7 +102,7 @@ namespace LoanAuth.Controllers
                 };
 
                 await _httpClient.PostAsJsonAsync(
-                    "https://localhost:7002/api/profile/create", // 🔁 change port if needed
+                    "http://localhost:5260/api/profile/create",
                     profileDto
                 );
             }

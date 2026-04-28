@@ -1,0 +1,241 @@
+@model LoanSphere_Frontend.Models.LoanDetailsViewModel
+@{
+    ViewData["Title"] = "Loan Details";
+    var nextInstallment = Model.CanSeePaymentSchedule ? Model.Loan.NextPendingInstallment : null;
+    var paidInstallments = Model.Loan.PaidInstallments;
+}
+
+<div class="workspace-grid">
+    <partial name="_InstitutionRail" />
+
+    <div class="workspace-main">
+        <section class="workspace-heading">
+            <p class="eyebrow">Loan Ledger Detail</p>
+            <h1>@Model.Loan.LoanType facility overview.</h1>
+            <p>Review state, approval trail, and payment visibility for this loan now live in one place.</p>
+        </section>
+
+        <section class="detail-grid">
+            <article class="hero-balance-card">
+                <p class="eyebrow">Financial Snapshot</p>
+                <div class="balance-amount">Rs. @Model.Loan.Amount.ToString("N0")</div>
+                <div class="metric-band">
+                    <span class="mini-stat">EMI Rs. @Model.Loan.EmiAmount.ToString("N2")</span>
+                    <span class="mini-stat">Total payable Rs. @Model.Loan.TotalPayable.ToString("N2")</span>
+                    <span class="mini-stat">Outstanding Rs. @Model.Loan.OutstandingAmount.ToString("N2")</span>
+                </div>
+            </article>
+
+            <article class="obligation-card">
+                <p class="eyebrow">Review Outcome</p>
+                <h3>@Model.Loan.Status</h3>
+                <p>@Model.Loan.ReviewSummary</p>
+                @if (!string.IsNullOrWhiteSpace(Model.Loan.PrimaryReviewReason))
+                {
+                    <div class="decision-note">
+                        <strong>Reason</strong>
+                        <span>@Model.Loan.PrimaryReviewReason</span>
+                    </div>
+                }
+            </article>
+        </section>
+
+        <section class="review-matrix">
+            <article class="review-card">
+                <p class="eyebrow">Admin Review</p>
+                <h3>@Model.Loan.AdminReviewStatus</h3>
+                <p>@(string.IsNullOrWhiteSpace(Model.Loan.AdminReviewReason) ? "Awaiting admin review or approval note." : Model.Loan.AdminReviewReason)</p>
+                @if (Model.Loan.AdminReviewedAt.HasValue)
+                {
+                    <span class="table-secondary">Updated @Model.Loan.AdminReviewedAt.Value.ToString("dd MMM yyyy, hh:mm tt")</span>
+                }
+            </article>
+
+            <article class="review-card">
+                <p class="eyebrow">Manager Review</p>
+                <h3>@Model.Loan.ManagerReviewStatus</h3>
+                <p>@(string.IsNullOrWhiteSpace(Model.Loan.ManagerReviewReason) ? "Awaiting manager review or approval note." : Model.Loan.ManagerReviewReason)</p>
+                @if (Model.Loan.ManagerReviewedAt.HasValue)
+                {
+                    <span class="table-secondary">Updated @Model.Loan.ManagerReviewedAt.Value.ToString("dd MMM yyyy, hh:mm tt")</span>
+                }
+            </article>
+
+            <article class="review-card">
+                <p class="eyebrow">Lifecycle</p>
+                <h3>@Model.Loan.DocsVerified</h3>
+                <p>Applied on @Model.Loan.AppliedAt.ToString("dd MMM yyyy") and last updated on @Model.Loan.UpdatedAt.ToString("dd MMM yyyy").</p>
+            </article>
+        </section>
+
+        @if (Model.CanReview)
+        {
+            <section class="form-panel">
+                <p class="eyebrow">Review Actions</p>
+                <h3>@Model.ReviewerRole decision desk</h3>
+                <p>The loan is approved only after both admin and manager approve it. A rejection immediately closes the review and should include a reason.</p>
+
+                <form method="post" asp-action="UpdateDecision" asp-route-id="@Model.Loan.LoanId" class="field-stack mt-4">
+                    @Html.AntiForgeryToken()
+
+                    <div>
+                        <label class="form-label" for="reason">Review note</label>
+                        <textarea id="reason" name="reason" class="form-control" placeholder="Add a short note. Rejection requires a reason."></textarea>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button type="submit" name="status" value="Approved" class="solid-button">Approve</button>
+                        <button type="submit" name="status" value="Rejected" class="outline-button">Reject</button>
+                    </div>
+                </form>
+            </section>
+        }
+
+        @if (Model.CanSeePaymentSchedule)
+        {
+            <section class="payment-summary-grid">
+                <article class="detail-card">
+                    <p class="eyebrow">Upcoming Payment</p>
+                    @if (nextInstallment != null)
+                    {
+                        <h3>@nextInstallment.DueDate.ToString("dd MMM yyyy")</h3>
+                        <p>Next payment due for this facility.</p>
+                        <div class="decision-note">
+                            <strong>Amount</strong>
+                            <span>Rs. @nextInstallment.EmiAmount.ToString("N2")</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <h3>No pending EMI</h3>
+                        <p>All current installments are cleared.</p>
+                    }
+                </article>
+
+                <article class="detail-card">
+                    <p class="eyebrow">Payment Progress</p>
+                    <h3>@paidInstallments.Count paid</h3>
+                    <p>@Model.Loan.EmiSchedules.Count total installments in the approved schedule.</p>
+                    <div class="decision-note">
+                        <strong>Total paid</strong>
+                        <span>Rs. @Model.Loan.TotalPaid.ToString("N2")</span>
+                    </div>
+                </article>
+
+                <article class="detail-card">
+                    <p class="eyebrow">Outstanding Balance</p>
+                    <h3>Rs. @Model.Loan.OutstandingAmount.ToString("N2")</h3>
+                    <p>Remaining repayment exposure on this facility.</p>
+                    <div class="decision-note">
+                        <strong>Docs</strong>
+                        <span>@Model.Loan.DocsVerified</span>
+                    </div>
+                </article>
+            </section>
+
+            <section class="table-card">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Payment History</p>
+                        <h2>Processed Installments</h2>
+                        <p>Paid EMI rows appear here as the loan advances through its schedule.</p>
+                    </div>
+                </div>
+
+                @if (!paidInstallments.Any())
+                {
+                    <div class="empty-state">
+                        <h3>No payments recorded yet</h3>
+                        <p>The approved loan already has an amortization schedule, but no installment has been marked as paid yet.</p>
+                    </div>
+                }
+                else
+                {
+                    <table class="ledger-table">
+                        <thead>
+                            <tr>
+                                <th>Installment</th>
+                                <th>Paid on</th>
+                                <th>Amount</th>
+                                <th>Principal</th>
+                                <th>Interest</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in paidInstallments)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="table-primary">Month @item.MonthNumber</span>
+                                        <span class="table-secondary">@item.DueDate.ToString("dd MMM yyyy")</span>
+                                    </td>
+                                    <td>@((item.PaidAt ?? item.DueDate).ToString("dd MMM yyyy"))</td>
+                                    <td>Rs. @item.EmiAmount.ToString("N2")</td>
+                                    <td>Rs. @item.PrincipalComponent.ToString("N2")</td>
+                                    <td>Rs. @item.InterestComponent.ToString("N2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </section>
+
+            <section class="table-card">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Amortization Schedule</p>
+                        <h2>EMI Breakdown</h2>
+                        <p>Approved loans expose the full installment schedule with due date, principal, interest, and balance.</p>
+                    </div>
+                </div>
+
+                <table class="ledger-table amortization-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Due date</th>
+                            <th>EMI</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>Balance</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Loan.EmiSchedules.OrderBy(x => x.MonthNumber))
+                        {
+                            <tr>
+                                <td>
+                                    <span class="table-primary">Month @item.MonthNumber</span>
+                                </td>
+                                <td>@item.DueDate.ToString("dd MMM yyyy")</td>
+                                <td>Rs. @item.EmiAmount.ToString("N2")</td>
+                                <td>Rs. @item.PrincipalComponent.ToString("N2")</td>
+                                <td>Rs. @item.InterestComponent.ToString("N2")</td>
+                                <td>Rs. @item.RemainingBalance.ToString("N2")</td>
+                                <td>
+                                    <span class="status-chip @(item.IsPaid ? "status-approved" : "status-pending")">
+                                        @(item.IsPaid ? "Paid" : "Pending")
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+        }
+        else
+        {
+            <section class="info-note">
+                @if (Model.Loan.IsRejected)
+                {
+                    <p><strong>Schedule unavailable.</strong> This loan was rejected, so payment history and amortization are not active.</p>
+                }
+                else
+                {
+                    <p><strong>Awaiting final approval.</strong> The amortization schedule and payment due widgets become active only after both admin and manager approve the loan.</p>
+                }
+            </section>
+        }
+    </div>
+</div>

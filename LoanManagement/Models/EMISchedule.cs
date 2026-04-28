@@ -1,11 +1,15 @@
-﻿namespace LoanManagement.Models
+using System.Text.Json.Serialization;
+
+namespace LoanManagement.Models
 {
     public class EMISchedule
     {
         public int Id { get; set; }
 
         public int LoanId { get; set; }
-        public Loan Loan { get; set; }
+
+        [JsonIgnore]
+        public Loan? Loan { get; set; }
 
         public int MonthNumber { get; set; }
 

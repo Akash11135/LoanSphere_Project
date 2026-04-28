@@ -1,0 +1,125 @@
+@model LoanSphere_Frontend.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<section class="auth-shell">
+    <div class="auth-visual">
+        <div class="auth-brand">
+            <strong>LoanSphere</strong>
+            <small>Institutional onboarding</small>
+        </div>
+
+        <div>
+            <p class="eyebrow">Create Institutional Account</p>
+            <h1>The Architectural Ledger for modern finance.</h1>
+            <p>Register with secure role access and move directly into the same profile workflow your backend already supports.</p>
+        </div>
+
+        <div class="auth-note-card">
+            <strong>Institutional Standard</strong>
+            <p>Managers and admins use controlled access keys, while customer onboarding stays streamlined.</p>
+        </div>
+    </div>
+
+    <div class="auth-panel">
+        <div class="auth-form-block">
+            <p class="eyebrow">Account Creation</p>
+            <h1>Create Institutional Account</h1>
+            <p class="subtle-copy">Enter your credentials to provision access and continue into profile completion.</p>
+
+            <form method="post" asp-controller="Account" asp-action="Register" class="field-stack mt-4">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="field-grid">
+                    <div>
+                        <label asp-for="FullName" class="form-label"></label>
+                        <input asp-for="FullName" class="form-control" placeholder="e.g. Alexander Hamilton" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Phone" class="form-label"></label>
+                        <input asp-for="Phone" class="form-control" placeholder="+91 98765 43210" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" placeholder="name@institution.com" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Role" class="form-label"></label>
+                        <select asp-for="Role" class="form-select">
+                            <option value="Customer">Customer</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" placeholder="Create access key" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Repeat access key" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div id="secretKeyGroup">
+                    <label asp-for="SecretKey" class="form-label"></label>
+                    <input asp-for="SecretKey" class="form-control" placeholder="Required for manager and admin roles" />
+                    <span asp-validation-for="SecretKey" class="text-danger"></span>
+                </div>
+
+                <label class="form-check">
+                    <input class="form-check-input" type="checkbox" checked />
+                    <span>I agree to the security standards and compliance protocols of LoanSphere.</span>
+                </label>
+
+                <button type="submit" class="solid-button full-width">Register</button>
+            </form>
+
+            <div class="divider-text"><span>Already have institutional access?</span></div>
+
+            <div class="card-inline-actions">
+                <a class="outline-button" asp-action="Login">Sign in to Ledger</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const roleSelect = document.getElementById("Role");
+            const secretKeyGroup = document.getElementById("secretKeyGroup");
+            const secretKeyInput = document.getElementById("SecretKey");
+            const secretKeyValidation = document.querySelector('[data-valmsg-for="SecretKey"]');
+
+            const syncSecretKeyVisibility = () => {
+                const needsSecretKey = roleSelect.value === "Admin" || roleSelect.value === "Manager";
+                secretKeyGroup.style.display = needsSecretKey ? "block" : "none";
+                secretKeyInput.disabled = !needsSecretKey;
+
+                if (!needsSecretKey) {
+                    secretKeyInput.value = "";
+                    secretKeyInput.classList.remove("input-validation-error");
+
+                    if (secretKeyValidation) {
+                        secretKeyValidation.textContent = "";
+                        secretKeyValidation.classList.remove("field-validation-error");
+                        secretKeyValidation.classList.add("field-validation-valid");
+                    }
+                }
+            };
+
+            syncSecretKeyVisibility();
+            roleSelect.addEventListener("change", syncSecretKeyVisibility);
+        })();
+    </script>
+}

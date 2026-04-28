@@ -10,6 +10,6 @@ namespace LoanAuth.Services
 
         Task<(bool Success, string Message, string? UserId)> RegisterManagerAsync(RegisterManagerDto dto);
 
-        Task<(bool Success, string Message, string? Token)> LoginAsync(LoginDto dto);
+        Task<(bool Success, string Message, string? Token, string? UserId, string? Role, string? FullName, string? Email)> LoginAsync(LoginDto dto);
     }
 }

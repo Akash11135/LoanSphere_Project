@@ -1,4 +1,4 @@
-﻿using LoanManagement.Data;
+using LoanManagement.Data;
 using LoanManagement.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -66,13 +66,10 @@ namespace LoanManagement.Services
 
         public async Task<List<EMISchedule>> GetEMISchedule(int id)
         {
-            var resp =  await _context.EMISchedules
+            return await _context.EMISchedules
                          .Where(e => e.LoanId == id)
                          .OrderBy(e => e.MonthNumber)
                          .ToListAsync();
-
-            await _context.SaveChangesAsync();
-            return resp;
         }
     }
 }

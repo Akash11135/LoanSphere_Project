@@ -1,3 +1,355 @@
-﻿<h1>
-    Dashboard
-</h1>
+@model LoanSphere_Frontend.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var activeBalance = Model.MyLoans
+        .Where(loan => !loan.Status.Equals("Rejected", StringComparison.OrdinalIgnoreCase))
+        .Sum(loan => Math.Max(0, loan.TotalPayable - loan.TotalPaid));
+
+    var activeLoans = Model.MyLoans
+        .Count(loan => !loan.Status.Equals("Rejected", StringComparison.OrdinalIgnoreCase));
+
+    var nextInstallment = Model.MyLoans
+        .Select(loan => new { Loan = loan, Installment = loan.NextPendingInstallment })
+        .Where(item => item.Installment != null)
+        .OrderBy(item => item.Installment!.DueDate)
+        .FirstOrDefault();
+
+    var totalVolume = Model.ManagedLoans.Sum(loan => loan.Amount);
+    var pendingApplications = Model.ManagedLoans.Count(loan => loan.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase));
+    var attentionAmount = Model.ManagedLoans
+        .Where(loan => loan.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+        .Sum(loan => loan.Amount);
+}
+
+<div class="workspace-grid">
+    <partial name="_InstitutionRail" />
+
+    <div class="workspace-main">
+        @if (!Model.CanManageLoans)
+        {
+            <section class="workspace-heading">
+                <p class="eyebrow">Portfolio Overview</p>
+                <h1>Your lending portfolio.</h1>
+                <p>Track balance, next EMI, and every active loan from one dashboard.</p>
+            </section>
+
+            @if (Model.RequiresProfileCompletion)
+            {
+                <div class="summary-banner">
+                    <p class="eyebrow">Profile Completion Required</p>
+                    <h3>Complete your profile before applying again.</h3>
+                    <p>Add PAN, Aadhaar, and a profile image to unlock new applications.</p>
+                    <div class="hero-actions">
+                        <a class="solid-button" asp-controller="Profile" asp-action="Edit">Complete Profile</a>
+                        <a class="outline-button" asp-controller="Loan" asp-action="Apply">Review Loan Form</a>
+                    </div>
+                </div>
+            }
+
+            <section class="dashboard-hero-grid">
+                <article class="hero-balance-card">
+                    <p class="eyebrow">Total Active Balance</p>
+                    <div class="balance-amount">Rs. @activeBalance.ToString("N2")</div>
+                    <div class="metric-band">
+                        <span class="mini-stat">Active loans @activeLoans</span>
+                        @if (Model.Profile != null)
+                        {
+                            <span class="mini-stat">CIBIL @Model.Profile.CibilScore</span>
+                        }
+                        <span class="mini-stat">Status linked dashboards</span>
+                    </div>
+                </article>
+
+                <article class="obligation-card">
+                    <p class="eyebrow">Upcoming Obligation</p>
+                    @if (nextInstallment != null)
+                    {
+                        <h3>@nextInstallment.Installment!.DueDate.ToString("dd MMM yyyy")</h3>
+                        <p>Next payment for @nextInstallment.Loan.LoanType loan</p>
+                        <div class="installment-meter">
+                            <div class="meta-row">
+                                <span>Installment amount</span>
+                                <strong>Rs. @nextInstallment.Installment.EmiAmount.ToString("N2")</strong>
+                            </div>
+                            <div class="meter-track">
+                                <div class="meter-fill"></div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <h3>No pending EMI</h3>
+                        <p>Once a loan is approved, the next installment date and amount will appear here.</p>
+                    }
+                </article>
+            </section>
+
+            <section class="table-card">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Payment Ledger</p>
+                        <h2>Loan Portfolio Activity</h2>
+                        <p>Status, next EMI, and amortization access for each loan.</p>
+                    </div>
+                    <div class="table-cta">
+                        <a class="outline-button" asp-controller="Loan" asp-action="Apply">New Application</a>
+                    </div>
+                </div>
+
+                @if (!Model.MyLoans.Any())
+                {
+                    <div class="empty-state">
+                        <h3>No loans yet</h3>
+                        <p>Once you submit an application, it will appear here with status, next installment, and amortization access.</p>
+                    </div>
+                }
+                else
+                {
+                    <table class="ledger-table">
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Facility</th>
+                                <th>Status</th>
+                                <th>Next EMI</th>
+                                <th>Amount</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loan in Model.MyLoans.OrderByDescending(item => item.AppliedAt))
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="table-primary">LN-@loan.LoanId.ToString("D4")</span>
+                                        <span class="table-secondary">@loan.AppliedAt.ToString("dd MMM yyyy")</span>
+                                    </td>
+                                    <td>
+                                        <span class="table-primary">@loan.LoanType</span>
+                                        <span class="table-secondary">@loan.Purpose</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-chip status-@loan.Status.ToLowerInvariant()">@loan.Status</span>
+                                        <span class="table-secondary">@loan.ReviewSummary</span>
+                                        @if (!string.IsNullOrWhiteSpace(loan.PrimaryReviewReason))
+                                        {
+                                            <span class="table-secondary">Reason: @loan.PrimaryReviewReason</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (loan.IsFullyApproved && loan.NextPendingInstallment != null)
+                                        {
+                                            <span class="table-primary">Rs. @loan.NextPendingInstallment.EmiAmount.ToString("N2")</span>
+                                            <span class="table-secondary">@loan.NextPendingInstallment.DueDate.ToString("dd MMM yyyy")</span>
+                                        }
+                                        else if (loan.IsFullyApproved)
+                                        {
+                                            <span class="table-primary">No dues</span>
+                                            <span class="table-secondary">All scheduled payments are cleared.</span>
+                                        }
+                                        else if (loan.IsRejected)
+                                        {
+                                            <span class="table-primary">Review closed</span>
+                                            <span class="table-secondary">@(loan.PrimaryReviewReason ?? loan.ReviewSummary)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="table-primary">Awaiting approval</span>
+                                            <span class="table-secondary">Schedule activates after admin and manager approval.</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="table-primary">Rs. @loan.Amount.ToString("N0")</span>
+                                        <span class="table-secondary">Term @loan.TermInMonths months</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a class="solid-button" asp-controller="Loan" asp-action="Details" asp-route-id="@loan.LoanId">Open Loan</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </section>
+
+            <section class="promo-card">
+                <div>
+                    <p class="eyebrow">Next step</p>
+                    <h3>Need another facility?</h3>
+                    <p>Complete your profile and submit a fresh loan application when you're ready.</p>
+                </div>
+                <div class="promo-visual"></div>
+            </section>
+        }
+        else
+        {
+            <section class="workspace-heading">
+                <p class="eyebrow">Institutional Overview</p>
+                <h1>Financial Ledger</h1>
+                <p>Monitor pending applications, reviewed loans, and the current customer queue.</p>
+            </section>
+
+            <section class="ledger-metric-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+                <article class="metric-card">
+                    <p class="eyebrow">Total Loaned Volume</p>
+                    <h3>Rs. @totalVolume.ToString("N0")</h3>
+                    <p>Across the full customer review queue currently visible in this console.</p>
+                </article>
+                <article class="metric-card">
+                    <p class="eyebrow">Pending Applications</p>
+                    <h3>@pendingApplications</h3>
+                    <p>Applications currently waiting for underwriting attention and dashboard review.</p>
+                </article>
+                <article class="metric-card">
+                    <p class="eyebrow">Risk: Review Backlog</p>
+                    <h3>Rs. @attentionAmount.ToString("N0")</h3>
+                    <p>Pending volume requiring immediate approval or rejection visibility.</p>
+                </article>
+            </section>
+
+            <section class="table-card">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Recent Loan Applications</p>
+                        <h2>Customer Review Queue</h2>
+                        <p>Review every customer loan while keeping visibility into your own submissions below.</p>
+                    </div>
+                </div>
+
+                @if (!Model.ManagedLoans.Any())
+                {
+                    <div class="empty-state">
+                        <h3>No customer loans to review</h3>
+                        <p>As soon as a customer applies, the request will appear here with underwriting context and detail access.</p>
+                    </div>
+                }
+                else
+                {
+                    <table class="ledger-table">
+                        <thead>
+                            <tr>
+                                <th>Applicant</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Review</th>
+                                <th>Status</th>
+                                <th>Docs</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loan in Model.ManagedLoans.OrderByDescending(item => item.AppliedAt))
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="table-primary">@loan.UserId</span>
+                                        <span class="table-secondary">@loan.LoanType - @loan.Purpose</span>
+                                    </td>
+                                    <td>
+                                        <span class="table-primary">Rs. @loan.Amount.ToString("N0")</span>
+                                        <span class="table-secondary">Term @loan.TermInMonths months</span>
+                                    </td>
+                                    <td>
+                                        <span class="table-primary">@loan.AppliedAt.ToString("dd MMM yyyy")</span>
+                                        <span class="table-secondary">LN-@loan.LoanId.ToString("D4")</span>
+                                    </td>
+                                    <td>
+                                        <span class="table-primary">Admin: @loan.AdminReviewStatus</span>
+                                        <span class="table-secondary">Manager: @loan.ManagerReviewStatus</span>
+                                        @if (!string.IsNullOrWhiteSpace(loan.PrimaryReviewReason))
+                                        {
+                                            <span class="table-secondary">Reason: @loan.PrimaryReviewReason</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="status-chip status-@loan.Status.ToLowerInvariant()">@loan.Status</span>
+                                        <span class="table-secondary">@loan.ReviewSummary</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-chip @(loan.DocsVerified == "Verified" ? "status-approved" : loan.DocsVerified == "Rejected" ? "status-rejected" : "status-pending")">@loan.DocsVerified</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a class="solid-button" asp-controller="Loan" asp-action="Details" asp-route-id="@loan.LoanId">Review</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </section>
+
+            @if (Model.MyLoans.Any())
+            {
+                <section class="table-card">
+                    <div class="section-heading">
+                        <div>
+                            <p class="eyebrow">Personal Applications</p>
+                            <h2>Your Submitted Loans</h2>
+                            <p>Track the loans you personally created.</p>
+                        </div>
+                    </div>
+                    <table class="ledger-table">
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Facility</th>
+                                <th>Status</th>
+                                <th>Next EMI</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loan in Model.MyLoans.OrderByDescending(item => item.AppliedAt))
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="table-primary">LN-@loan.LoanId.ToString("D4")</span>
+                                        <span class="table-secondary">@loan.AppliedAt.ToString("dd MMM yyyy")</span>
+                                    </td>
+                                    <td>
+                                        <span class="table-primary">@loan.LoanType</span>
+                                        <span class="table-secondary">Rs. @loan.Amount.ToString("N0")</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-chip status-@loan.Status.ToLowerInvariant()">@loan.Status</span>
+                                        <span class="table-secondary">@loan.ReviewSummary</span>
+                                        @if (!string.IsNullOrWhiteSpace(loan.PrimaryReviewReason))
+                                        {
+                                            <span class="table-secondary">Reason: @loan.PrimaryReviewReason</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (loan.IsFullyApproved && loan.NextPendingInstallment != null)
+                                        {
+                                            <span class="table-primary">Rs. @loan.NextPendingInstallment.EmiAmount.ToString("N2")</span>
+                                            <span class="table-secondary">@loan.NextPendingInstallment.DueDate.ToString("dd MMM yyyy")</span>
+                                        }
+                                        else if (loan.IsFullyApproved)
+                                        {
+                                            <span class="table-primary">No dues</span>
+                                            <span class="table-secondary">All scheduled payments are cleared.</span>
+                                        }
+                                        else if (loan.IsRejected)
+                                        {
+                                            <span class="table-primary">Review closed</span>
+                                            <span class="table-secondary">@(loan.PrimaryReviewReason ?? loan.ReviewSummary)</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="table-primary">Awaiting approval</span>
+                                            <span class="table-secondary">Schedule activates after admin and manager approval.</span>
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        <a class="outline-button" asp-controller="Loan" asp-action="Details" asp-route-id="@loan.LoanId">Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            }
+        }
+    </div>
+</div>

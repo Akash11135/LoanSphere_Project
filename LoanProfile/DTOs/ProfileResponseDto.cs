@@ -12,5 +12,7 @@
         public string? AadhaarNumber { get; set; }
 
         public int CibilScore { get; set; }
+
+        public bool IsProfileComplete { get; set; }
     }
 }

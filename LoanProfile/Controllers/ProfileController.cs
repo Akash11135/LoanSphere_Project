@@ -16,14 +16,14 @@ namespace LoanProfile.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateProfile(CreateProfileDto dto)
+        public async Task<IActionResult> CreateProfile([FromBody] CreateProfileDto dto)
         {
             await _service.CreateProfileAsync(dto);
             return Ok("Profile created");
         }
 
         [HttpPut("{userId}")]
-        public async Task<IActionResult> UpdateProfile(string userId, UpdateProfileDto dto)
+        public async Task<IActionResult> UpdateProfile(string userId, [FromBody] UpdateProfileDto dto)
         {
             await _service.UpdateProfileAsync(userId, dto);
             return Ok("Profile updated");

@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace LoanManagement.DTOs
 {
     public class CreateLoanDto
     {
-        public int UserId { get; set; }
+        [Required]
+        public string UserId { get; set; } = string.Empty;
 
         [Required]
         [Range(0, double.MaxValue)]

@@ -18,6 +18,20 @@ namespace LoanProfile.Services
 
         public async Task CreateProfileAsync(CreateProfileDto dto)
         {
+            var existingProfile = await _context.UserProfiles
+                .FirstOrDefaultAsync(p => p.UserId == dto.UserId);
+
+            if (existingProfile != null)
+            {
+                existingProfile.FullName = dto.FullName;
+                existingProfile.Email = dto.Email;
+                existingProfile.Phone = dto.Phone;
+                existingProfile.Role = dto.Role;
+
+                await _context.SaveChangesAsync();
+                return;
+            }
+
             var profile = new UserProfile
             {
                 UserId = dto.UserId,
@@ -62,7 +76,10 @@ namespace LoanProfile.Services
                 ProfilePictureUrl = profile.ProfilePictureUrl,
                 PanCardNumber = profile.PanCardNumber,
                 AadhaarNumber = profile.AadhaarNumber,
-                CibilScore = profile.CibilScore
+                CibilScore = profile.CibilScore,
+                IsProfileComplete = !string.IsNullOrWhiteSpace(profile.ProfilePictureUrl)
+                    && !string.IsNullOrWhiteSpace(profile.PanCardNumber)
+                    && !string.IsNullOrWhiteSpace(profile.AadhaarNumber)
             };
         }
     }

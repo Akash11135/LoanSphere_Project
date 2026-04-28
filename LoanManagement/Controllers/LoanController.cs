@@ -1,4 +1,4 @@
-﻿using LoanManagement.DTOs;
+using LoanManagement.DTOs;
 using LoanManagement.Services;
 using LoanManagement.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -21,10 +21,13 @@ namespace LoanManagement.Controllers
         public async Task<IActionResult> GetAll()
         {
             var resp = await _loanService.GetAllService();
-            if (resp == null)
-            {
-                return Ok(new { mess=$"Unable to find all Loans BEC" });
-            }
+            return Ok(resp);
+        }
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetByUser(string userId)
+        {
+            var resp = await _loanService.GetByUserService(userId);
             return Ok(resp);
         }
 
@@ -32,10 +35,6 @@ namespace LoanManagement.Controllers
         public async Task<IActionResult> GetById(int id) 
         { 
             var resp = await _loanService.GetByIdService(id);
-            if (resp == null)
-            {
-                return Ok(new { mess = $"Loan with id:{id} not found BEC." });
-            }
             return Ok(resp);
         }
 
@@ -44,25 +43,23 @@ namespace LoanManagement.Controllers
         {
             if (id != loan.LoanId)
             {
-                return BadRequest("Id not found BEC");
+                return BadRequest("Id not found");
             }
             var resp = await _loanService.UpdateService(id,loan);
-            if (resp == null)
-            {
-                return Ok(new { mess = $"Loan with id:{id} not found BEC." });
-            }
             return Ok(resp);
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create(CreateLoanDto loan)
+        public async Task<IActionResult> Create([FromBody] CreateLoanDto loan)
         {
             var resp = await _loanService.CreateService(loan);
+            return Ok(resp);
+        }
 
-            if (resp == null)
-            {
-                return Ok(new { mess = $"Loan not created BEC." });
-            }
+        [HttpPatch("{id}/decision")]
+        public async Task<IActionResult> UpdateDecision(int id, [FromBody] UpdateLoanDecisionDto dto)
+        {
+            var resp = await _loanService.UpdateDecisionService(id, dto.ReviewerRole, dto.Status, dto.Reason);
             return Ok(resp);
         }
 
@@ -70,10 +67,6 @@ namespace LoanManagement.Controllers
         public async Task<IActionResult> Delete(int id) 
         { 
             var res = await _loanService.DeleteService(id);
-            if (res == null)
-            {
-                return Ok(new {mess="Unable to delete"});
-            }
             return Ok(res);
         }
     }

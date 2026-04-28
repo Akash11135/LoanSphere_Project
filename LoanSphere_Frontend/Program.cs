@@ -1,3 +1,6 @@
+using LoanSphere_Frontend.Models;
+using LoanSphere_Frontend.Services;
+
 namespace LoanSphere_Frontend
 {
     public class Program
@@ -6,8 +9,18 @@ namespace LoanSphere_Frontend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSession(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.IdleTimeout = TimeSpan.FromHours(8);
+            });
+            builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection(ApiSettings.SectionName));
+            builder.Services.AddHttpClient("LoanSphereApi");
+            builder.Services.AddScoped<CurrentUserService>();
+            builder.Services.AddScoped<LoanSphereApiClient>();
 
             var app = builder.Build();
 
@@ -23,6 +36,7 @@ namespace LoanSphere_Frontend
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 

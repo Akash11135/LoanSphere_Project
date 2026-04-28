@@ -1,0 +1,67 @@
+@inject LoanSphere_Frontend.Services.CurrentUserService CurrentUserService
+@{
+    var currentUser = CurrentUserService.GetCurrentUser();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+    var initials = "LS";
+
+    if (!string.IsNullOrWhiteSpace(currentUser?.FullName))
+    {
+        var parts = currentUser.FullName
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Take(2)
+            .Select(part => char.ToUpperInvariant(part[0]).ToString());
+
+        var builtInitials = string.Concat(parts);
+        if (!string.IsNullOrWhiteSpace(builtInitials))
+        {
+            initials = builtInitials;
+        }
+    }
+
+    var deskLabel = currentUser?.Role switch
+    {
+        "Admin" => "Admin Portal",
+        "Manager" => "Manager Desk",
+        _ => "Client Portfolio"
+    };
+}
+
+<aside class="workspace-rail">
+    <div class="rail-user-card">
+        <span class="rail-avatar">@initials</span>
+        <div>
+            <strong>@currentUser?.FullName</strong>
+            <small>@deskLabel</small>
+        </div>
+    </div>
+
+    <nav class="rail-nav">
+        <a class="rail-link @(currentController == "Dashboard" ? "is-active" : string.Empty)" asp-controller="Dashboard" asp-action="Index">
+            <span class="rail-icon"></span>
+            Dashboard
+        </a>
+        <a class="rail-link @(currentController == "Loan" && ViewContext.RouteData.Values["action"]?.ToString() == "Apply" ? "is-active" : string.Empty)" asp-controller="Loan" asp-action="Apply">
+            <span class="rail-icon"></span>
+            Loan Pipeline
+        </a>
+        <a class="rail-link @(currentController == "Profile" ? "is-active" : string.Empty)" asp-controller="Profile" asp-action="Edit">
+            <span class="rail-icon"></span>
+            Identity Center
+        </a>
+        <a class="rail-link @(currentController == "Loan" && ViewContext.RouteData.Values["action"]?.ToString() == "Details" ? "is-active" : string.Empty)" asp-controller="Dashboard" asp-action="Index">
+            <span class="rail-icon"></span>
+            Loan Directory
+        </a>
+    </nav>
+
+    <div class="rail-insight-card">
+        <span class="eyebrow">System Guardrails</span>
+        <h4>Institutional-grade access</h4>
+        <p>Protected workflows, profile-linked underwriting, and auditable application states in one compact workspace.</p>
+    </div>
+
+    <form method="post" asp-controller="Account" asp-action="Logout" class="rail-logout">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="ghost-button full-width">Sign Out</button>
+    </form>
+</aside>

@@ -75,6 +75,16 @@ namespace LoanManagement.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
+                    b.Property<string>("AdminReviewReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("AdminReviewedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AdminReviewStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("AppliedAt")
                         .HasColumnType("datetime2");
 
@@ -89,6 +99,16 @@ namespace LoanManagement.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("LoanType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ManagerReviewReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ManagerReviewedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ManagerReviewStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -112,8 +132,9 @@ namespace LoanManagement.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LoanId");
 

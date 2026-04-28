@@ -77,17 +77,18 @@ namespace LoanAuth.Services
         }
 
         // 🔹 LOGIN
-        public async Task<(bool Success, string Message, string? Token)> LoginAsync(LoginDto dto)
+        public async Task<(bool Success, string Message, string? Token, string? UserId, string? Role, string? FullName, string? Email)> LoginAsync(LoginDto dto)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
-                return (false, "Invalid email or password.", null);
+                return (false, "Invalid email or password.", null, null, null, null, null);
 
             var roles = await _userManager.GetRolesAsync(user);
             var token = GenerateJwtToken(user, roles);
+            var primaryRole = roles.FirstOrDefault();
 
-            return (true, "Login successful.", token);
+            return (true, "Login successful.", token, user.Id, primaryRole, user.FullName, user.Email);
         }
 
         // 🔹 COMMON REGISTER METHOD

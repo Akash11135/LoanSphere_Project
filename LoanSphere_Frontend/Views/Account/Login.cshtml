@@ -1,0 +1,70 @@
+@model LoanSphere_Frontend.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Log In";
+}
+
+<section class="auth-shell">
+    <div class="auth-visual">
+        <div class="auth-brand">
+            <strong>LoanSphere</strong>
+            <small>The Architectural Ledger</small>
+        </div>
+
+        <div>
+            <p class="eyebrow">Institutional Access</p>
+            <h1>Welcome back to your lending console.</h1>
+            <p>Access your secure ledger, review your portfolio, and continue straight into your active workflow.</p>
+        </div>
+
+        <div class="auth-note-card">
+            <strong>Secure Session Standard</strong>
+            <p>Role-aware access with a cleaner, tighter login surface for day-to-day use.</p>
+        </div>
+    </div>
+
+    <div class="auth-panel">
+        <div class="auth-panel-top">
+            <span class="secure-pill">Protected Access</span>
+        </div>
+
+        <div class="auth-form-block">
+            <p class="eyebrow">Institutional Sign In</p>
+            <h1>Welcome Back</h1>
+            <p class="subtle-copy">Use your registered email and access key to continue.</p>
+
+            <form method="post" asp-controller="Account" asp-action="Login" class="field-stack mt-4">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div>
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" placeholder="name@loansphere.com" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control" placeholder="Enter your access key" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <label class="form-check">
+                    <input class="form-check-input" type="checkbox" />
+                    <span>Trust this device for 30 days</span>
+                </label>
+
+                <button type="submit" class="solid-button full-width">Login to Dashboard</button>
+            </form>
+
+            <div class="divider-text"><span>New to the Sphere?</span></div>
+
+            <div class="card-inline-actions">
+                <a class="outline-button" asp-action="Register">Register Institutional Account</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

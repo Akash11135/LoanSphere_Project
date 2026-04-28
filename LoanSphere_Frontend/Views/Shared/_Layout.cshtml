@@ -1,123 +1,123 @@
-﻿<!DOCTYPE html>
+@inject LoanSphere_Frontend.Services.CurrentUserService CurrentUserService
+@{
+    var currentUser = CurrentUserService.GetCurrentUser();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? string.Empty;
+    var initials = "LS";
+
+    if (!string.IsNullOrWhiteSpace(currentUser?.FullName))
+    {
+        var parts = currentUser.FullName
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Take(2)
+            .Select(part => char.ToUpperInvariant(part[0]).ToString());
+
+        var builtInitials = string.Concat(parts);
+        if (!string.IsNullOrWhiteSpace(builtInitials))
+        {
+            initials = builtInitials;
+        }
+    }
+
+    var pageModeClass = currentController == "Account"
+        ? "mode-auth"
+        : currentUser == null
+            ? "mode-public"
+            : "mode-workspace";
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LoanSphere_Frontend</title>
+    <title>@ViewData["Title"] - LoanSphere</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LoanSphere_Frontend.styles.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<style>
-    body{
-        background-color: #F7FAFC;
-    }
-    header{
-        display:flex;
-        justify-content:center;
-        align-items:center;
-    }
-    .nav-container{
-        border-bottom:1px solid lightgray;
-        height:84px;
-        display:flex;
-        justify-content:space-between;
-        padding:20px 48px;
-        width:80%;
-        /* align-items:center; */
-    }
-    .nav-title{
-        font-size:20px;
-        font-weight:bold;
-        color:#004A7C;
-    }
-    
-    .nav-links ul{
-        list-style:none;
-        display:flex;
-        color: #475569;
-       
-    }
-    .nav-links li{
-        margin-right:1rem;
-        cursor:pointer;
-        font-weight:500;
-        padding:0.25rem
-    }
-
-    .nav-links li:hover {
-            color: #004A7C;
-            border-bottom:2px solid #004A7C;
-            transition:0.07s ease-in-out;
-    }
-
-    .nav-links a{
-        text-decoration:none;
-    }
-
-    .nav-actions{
-      
-        padding:0.25rem;
-        width:30%;
-        display:flex;
-        justify-content:  space-evenly;
-    }
-
-   .nav-actions .btns {
-        /* margin-top: 2rem; */
-        /* padding: 12px 24px; */
-        background: #003358;
-        color: #ffffff;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        min-width:7rem;
-    }
-
-    /* Hover effect */
-    .nav-actions .btns:hover {
-        background: #005A8D;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(0, 51, 88, 0.2);
-    }
-
-   
-</style>
-<body>
-    <header>
-        <nav class="nav-container">
-            <div class="nav-title">
-                LoanSphere
+<body class="@pageModeClass">
+    <div class="app-frame">
+        <header class="topbar">
+            <div class="topbar-brand">
+                <a class="brand-lockup" asp-controller="Home" asp-action="Index">
+                    <span class="brand-emblem">LS</span>
+                    <span class="brand-copy">
+                        <strong>LoanSphere</strong>
+                        <small>Architectural Ledger</small>
+                    </span>
+                </a>
             </div>
-            <div class="nav-links">
-                <ul>
-                    <li><a>Products</a></li>
-                    <li><a>Market Rates</a></li>
-                    <li><a>About Us</a></li>
-                    <li><a>Contacts</a></li>
-                </ul>
+
+            <nav class="topbar-nav">
+                @if (currentUser == null)
+                {
+                    <a class="topbar-link" asp-controller="Home" asp-action="Index" asp-fragment="products">Products</a>
+                    <a class="topbar-link" asp-controller="Home" asp-action="Index" asp-fragment="partners">Market Rates</a>
+                    <a class="topbar-link" asp-controller="Home" asp-action="Index" asp-fragment="about">About Us</a>
+                    <a class="topbar-link" asp-controller="Home" asp-action="Index" asp-fragment="contact">Contact</a>
+                }
+                else
+                {
+                    <a class="topbar-link @(currentController == "Dashboard" ? "is-active" : string.Empty)" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                    <a class="topbar-link @(currentController == "Loan" && currentAction == "Apply" ? "is-active" : string.Empty)" asp-controller="Loan" asp-action="Apply">Apply</a>
+                    <a class="topbar-link @(currentController == "Profile" ? "is-active" : string.Empty)" asp-controller="Profile" asp-action="Edit">Identity</a>
+                }
+            </nav>
+
+            <div class="topbar-actions">
+                @if (currentUser == null)
+                {
+                    <a class="ghost-button" asp-controller="Account" asp-action="Login">Log In</a>
+                    <a class="solid-button" asp-controller="Account" asp-action="Register">Apply Now</a>
+                }
+                else
+                {
+                    <span class="secure-pill">Protected Access</span>
+                    <div class="account-chip">
+                        <span class="account-avatar">@initials</span>
+                        <div>
+                            <strong>@currentUser.FullName</strong>
+                            <small>@currentUser.Role</small>
+                        </div>
+                    </div>
+                    <form method="post" asp-controller="Account" asp-action="Logout">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="ghost-button">Sign Out</button>
+                    </form>
+                }
             </div>
-            <div class="nav-actions">
-                <button class="btns btn-login" asp-controller="Dashboard" asp-action="Index">Log In</button>
-                <button class="btns btn-apply">Apply Now</button>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+        </header>
+
+        <main class="page-shell">
+            @if (TempData["StatusMessage"] is string statusMessage)
+            {
+                <div class="status-banner success-banner" data-auto-dismiss="true" role="status">@statusMessage</div>
+            }
+
+            @if (TempData["ErrorMessage"] is string errorMessage)
+            {
+                <div class="status-banner error-banner" data-auto-dismiss="true" role="alert">@errorMessage</div>
+            }
+
             @RenderBody()
         </main>
+
+        <footer class="footer-shell">
+            <div>
+                <strong>LoanSphere</strong>
+                <p>Institutional lending workflows with secure identity, profile, and amortization visibility.</p>
+            </div>
+            <div class="footer-links">
+                <a asp-controller="Home" asp-action="Index" asp-fragment="about">About</a>
+                <a asp-controller="Home" asp-action="Index" asp-fragment="contact">Contact</a>
+                <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - LoanSphere_Frontend - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

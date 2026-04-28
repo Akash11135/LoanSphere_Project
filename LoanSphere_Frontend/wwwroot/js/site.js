@@ -1,4 +1,10 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+document.addEventListener("DOMContentLoaded", () => {
+    const banners = document.querySelectorAll("[data-auto-dismiss='true']");
 
-// Write your JavaScript code.
+    banners.forEach((banner) => {
+        window.setTimeout(() => {
+            banner.classList.add("is-hiding");
+            window.setTimeout(() => banner.remove(), 260);
+        }, 3600);
+    });
+});

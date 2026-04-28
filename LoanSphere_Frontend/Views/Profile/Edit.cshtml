@@ -1,0 +1,178 @@
+@model LoanSphere_Frontend.Models.ProfileEditViewModel
+@{
+    ViewData["Title"] = "Profile";
+
+    var initials = string.Concat(
+        Model.FullName
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Take(2)
+            .Select(part => char.ToUpperInvariant(part[0]).ToString())
+    );
+
+    if (string.IsNullOrWhiteSpace(initials))
+    {
+        initials = "LS";
+    }
+}
+
+<div class="workspace-grid">
+    <partial name="_InstitutionRail" />
+
+    <div class="workspace-main">
+        <section class="workspace-heading">
+            <p class="eyebrow">Account Settings</p>
+            <h1>Manage your professional identity and security posture.</h1>
+            <p>Profile completion feeds directly into the lending workflow. This screen is styled like an identity and settings console while keeping your existing form logic untouched.</p>
+        </section>
+
+        <section class="profile-grid">
+            <article class="profile-identity-card">
+                <div class="identity-header">
+                    <div class="identity-media">
+                        <span class="profile-photo-shell @(string.IsNullOrWhiteSpace(Model.ProfilePictureUrl) ? "is-fallback" : string.Empty)">
+                            @if (!string.IsNullOrWhiteSpace(Model.ProfilePictureUrl))
+                            {
+                                <img class="profile-photo" src="@Model.ProfilePictureUrl" alt="@Model.FullName" onerror="this.style.display='none'; this.parentElement.classList.add('is-fallback');" />
+                            }
+                            <span class="profile-photo-fallback" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                    <path d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z" />
+                                </svg>
+                            </span>
+                        </span>
+                        <div>
+                            <h3>@Model.FullName</h3>
+                            <p>@Model.Role profile</p>
+                            <span class="route-chip">CIBIL @Model.CibilScore</span>
+                        </div>
+                    </div>
+                    <span class="status-chip @(Model.IsProfileComplete ? "status-approved" : "status-pending")">
+                        @(Model.IsProfileComplete ? "Profile Complete" : "Action Required")
+                    </span>
+                </div>
+
+                <div class="identity-meta-grid">
+                    <div>
+                        <span class="meta-label">Email address</span>
+                        <span class="meta-value">@Model.Email</span>
+                    </div>
+                    <div>
+                        <span class="meta-label">Phone number</span>
+                        <span class="meta-value">@Model.Phone</span>
+                    </div>
+                    <div>
+                        <span class="meta-label">PAN</span>
+                        <span class="meta-value">@(string.IsNullOrWhiteSpace(Model.PanCardNumber) ? "Not captured" : Model.PanCardNumber)</span>
+                    </div>
+                    <div>
+                        <span class="meta-label">Aadhaar</span>
+                        <span class="meta-value">@(string.IsNullOrWhiteSpace(Model.AadhaarNumber) ? "Not captured" : Model.AadhaarNumber)</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="profile-security-card">
+                <p class="eyebrow">Security Status</p>
+                <h3>Enhanced Protection</h3>
+                <p>Identity readiness, underwriting-aligned details, and a cleaner front-end presentation for backend-heavy logic.</p>
+
+                <div class="settings-list">
+                    <div class="settings-row">
+                        <div>
+                            <strong>Profile completeness</strong>
+                            <p>Required before a new loan application is accepted.</p>
+                        </div>
+                        <span class="toggle-chip @(Model.IsProfileComplete ? "is-on" : string.Empty)">@(Model.IsProfileComplete ? "Ready" : "Pending")</span>
+                    </div>
+                    <div class="settings-row">
+                        <div>
+                            <strong>Role classification</strong>
+                            <p>Current institution access layer for this account.</p>
+                        </div>
+                        <span class="toggle-chip is-on">@Model.Role</span>
+                    </div>
+                    <div class="settings-row">
+                        <div>
+                            <strong>Lending posture</strong>
+                            <p>Profile-linked underwriting context visible to every application form.</p>
+                        </div>
+                        <span class="toggle-chip is-on">Profile-linked</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="detail-grid">
+            <article class="form-panel">
+                <p class="eyebrow">Edit Profile</p>
+                <h3>Update your identity record</h3>
+                <p>These fields preserve your current backend rules while giving the screen more depth and a more operational visual hierarchy.</p>
+
+                <form method="post" asp-action="Edit" class="field-stack mt-4">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div>
+                        <label asp-for="ProfilePictureUrl" class="form-label"></label>
+                        <input asp-for="ProfilePictureUrl" class="form-control" placeholder="https://your-image-url" />
+                        <span asp-validation-for="ProfilePictureUrl" class="text-danger"></span>
+                    </div>
+
+                    <div class="field-grid">
+                        <div>
+                            <label asp-for="PanCardNumber" class="form-label"></label>
+                            <input asp-for="PanCardNumber" class="form-control" placeholder="Enter PAN number" />
+                            <span asp-validation-for="PanCardNumber" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="AadhaarNumber" class="form-label"></label>
+                            <input asp-for="AadhaarNumber" class="form-control" placeholder="Enter Aadhaar number" />
+                            <span asp-validation-for="AadhaarNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button type="submit" class="solid-button">Save Profile</button>
+                    </div>
+                </form>
+            </article>
+
+            <article class="compliance-card">
+                <p class="eyebrow">Operational Notes</p>
+                <h3>Identity-linked application readiness</h3>
+                <div class="document-list">
+                    <div class="document-row">
+                        <div>
+                            <strong>Profile picture</strong>
+                            <p>Used to enrich identity presentation across account surfaces.</p>
+                        </div>
+                        <span class="document-status">Visual ID</span>
+                    </div>
+                    <div class="document-row">
+                        <div>
+                            <strong>PAN number</strong>
+                            <p>Supports institutional KYC styling in the frontend and underwriting context.</p>
+                        </div>
+                        <span class="document-status">Tax identity</span>
+                    </div>
+                    <div class="document-row">
+                        <div>
+                            <strong>Aadhaar number</strong>
+                            <p>Completes the profile set required before a new loan request is submitted.</p>
+                        </div>
+                        <span class="document-status">National ID</span>
+                    </div>
+                </div>
+
+                <form method="post" asp-action="Skip" class="mt-4">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="outline-button full-width">Do it later</button>
+                </form>
+            </article>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
