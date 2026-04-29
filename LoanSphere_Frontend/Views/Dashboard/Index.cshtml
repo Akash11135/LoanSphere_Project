@@ -25,51 +25,8 @@
 
     <div class="ls-layout">
 
-        <div class="ls-sidebar">
+        @await Html.PartialAsync("_Sidebar")
 
-            <div class="ls-sidebar-brand">
-                <div class="ls-brand-icon">
-                    <i data-lucide="landmark" style="width:18px;height:18px;"></i>
-                </div>
-                <span class="ls-brand-name">LoanSphere</span>
-            </div>
-
-            <span class="ls-nav-label">Main</span>
-
-            <a href="dashboard.html" class="ls-nav-item active">
-                <i data-lucide="layout-dashboard" class="ls-nav-icon"></i>
-                Dashboard
-            </a>
-            <a href="loan-pipeline.html" class="ls-nav-item">
-                <i data-lucide="git-branch" class="ls-nav-icon"></i>
-                Loan Summary
-            </a>
-            <a href="user-directory.html" class="ls-nav-item">
-                <i data-lucide="credit-card" class="ls-nav-icon"></i>
-                Payments
-            </a>
-            <a href="compliance.html" class="ls-nav-item">
-                <i data-lucide="files" class="ls-nav-icon"></i>
-                Documents
-            </a>
-
-            <span class="ls-nav-label" style="margin-top:0.5rem;">System</span>
-
-            <a href="settings.html" class="ls-nav-item">
-                <i data-lucide="settings" class="ls-nav-icon"></i>
-                Settings
-            </a>
-
-            <div style="flex:1;"></div>
-            <div class="ls-sidebar-user">
-                <div class="ls-user-avatar">AD</div>
-                <div>
-                    <div class="ls-user-name">Admin Portal</div>
-                    <div class="ls-user-role">LoanSphere Authority</div>
-                </div>
-            </div>
-
-        </div>
 
         <div style="display:flex;flex-direction:column;margin-left:9rem;">
 
@@ -268,7 +225,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <a asp-controller="Dashboard" asp-action="LoanDetails" asp-id="@loan.LoanId" class="ls-btn ls-btn-primary ls-btn-sm">
+                                            <a asp-controller="Dashboard" asp-action="LoanDetails" asp-route-loanId=@loan.LoanId asp-route-userId=@loan.UserId class="ls-btn ls-btn-primary ls-btn-sm">
                                                 <i data-lucide="calendar-range" style="width:12px;height:12px;"></i>
                                                 View Loan
                                             </a>

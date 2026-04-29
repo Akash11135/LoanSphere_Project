@@ -329,39 +329,7 @@
 <div class="ls-layout">
 
     <!-- ── Sidebar Nav ── -->
-    <div class="ls-sidebar">
-        <div class="ls-sidebar-brand">
-            <div class="ls-brand-icon">
-                <i data-lucide="landmark" style="width:18px;height:18px;"></i>
-            </div>
-            <span class="ls-brand-name">LoanSphere</span>
-        </div>
-        <span class="ls-nav-label">Main</span>
-        <a href="/Dashboard" class="ls-nav-item">
-            <i data-lucide="layout-dashboard" class="ls-nav-icon"></i> Dashboard
-        </a>
-        <a href="/LoanPipeline" class="ls-nav-item">
-            <i data-lucide="git-branch" class="ls-nav-icon"></i> Loan Pipeline
-        </a>
-        <a href="/UserDirectory" class="ls-nav-item">
-            <i data-lucide="users" class="ls-nav-icon"></i> User Directory
-        </a>
-        <a href="/Compliance" class="ls-nav-item">
-            <i data-lucide="shield-check" class="ls-nav-icon"></i> Compliance
-        </a>
-        <span class="ls-nav-label" style="margin-top:.5rem;">System</span>
-        <a href="/Settings" class="ls-nav-item">
-            <i data-lucide="settings" class="ls-nav-icon"></i> Settings
-        </a>
-        <div style="flex:1;"></div>
-        <div class="ls-sidebar-user">
-            <div class="ls-user-avatar">AD</div>
-            <div>
-                <div class="ls-user-name">Admin Portal</div>
-                <div class="ls-user-role">LoanSphere Authority</div>
-            </div>
-        </div>
-    </div>
+        @await Html.PartialAsync("_Sidebar")
 
     <!-- ── Page Body ── -->
     <div style="display:flex;flex-direction:column;margin-left:9rem;min-height:100vh;">
@@ -427,7 +395,7 @@
 
                 <!-- Form Area -->
                 <div style="flex:1;display:flex;flex-direction:column;">
-                    <form id="loanForm" asp-action="Create" asp-controller="Loan" method="post" enctype="multipart/form-data">
+                    <form id="loanForm" asp-action="ApplyNew" asp-controller="Dashboard" method="post" asp-route-userId=2 enctype="multipart/form-data">
                         @Html.AntiForgeryToken()
 
                         <div class="ls-apply-main">
@@ -615,7 +583,7 @@
 
                         <!-- ── Footer Actions ── -->
                         <div class="ls-apply-footer">
-                            <a href="/Dashboard" class="ls-btn-cancel">
+                            <a asp-controller="Dashboard"  asp-action="Index" class="ls-btn-cancel">
                                 <i data-lucide="arrow-left" style="width:13px;height:13px;"></i>
                                 Cancel Application
                             </a>

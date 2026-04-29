@@ -1,0 +1,335 @@
+﻿@model LoanManagement.Models.EMISchedule;
+
+@{
+    ViewData["Title"] = "Make Payment";
+}
+
+<div class="ls-main">
+
+    <div style="max-width:1180px;margin:auto;">
+
+        <div style="margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+                <h2 style="margin:0;font-size:28px;font-weight:800;">Loan Payment</h2>
+                <div class="ls-text-muted">Secure repayment checkout</div>
+            </div>
+
+            <span class="ls-status ls-status-active">
+                Loan Active
+            </span>
+        </div>
+
+
+        <div class="ls-grid-2" style="align-items:start;gap:1.5rem;">
+
+            <!-- LEFT SUMMARY -->
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+
+                <section class="ls-hero-card">
+                    <div class="ls-hero-label">
+                        Payment Due
+                    </div>
+
+                    <div class="ls-hero-value">
+                        ₹ @Model.EMIAmount.ToString("N2")
+                    </div>
+
+                    <div class="ls-hero-sub">
+                        EMI due @Model.DueDate.ToString("yyyy MMM , dd")
+                    </div>
+
+                    <div style="margin-top:1.5rem;display:flex;gap:.75rem;">
+                        <a class="ls-btn ls-btn-secondary">
+                            Download Statement
+                        </a>
+                        <a class="ls-btn ls-btn-primary">
+                            Pay Full Loan
+                        </a>
+                    </div>
+                </section>
+
+
+                <section class="ls-card">
+                    <div class="ls-table-title ls-mb-4">
+                        Loan Summary
+                    </div>
+
+                    <div style="display:grid;gap:16px;">
+
+                        <div style="display:flex;justify-content:space-between;">
+                            <span class="ls-text-muted">Principal</span>
+                            <strong>₹ @Model.PrincipalComponent.ToString("N2")</strong>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;">
+                            <span class="ls-text-muted">Interest</span>
+                            <strong>12%</strong>
+                        </div>
+
+                        <div style="display:flex;justify-content:space-between;">
+                            <span class="ls-text-muted">Interest Component</span>
+                            <strong>₹ @Model.InterestComponent</strong>
+                        </div>
+
+                   
+
+                        <div class="ls-divider"></div>
+
+                        <div style="display:flex;justify-content:space-between;font-size:20px;font-weight:800;">
+                            <span>Total Due</span>
+                            <span>₹ @Model.EMIAmount</span>
+                        </div>
+
+                    </div>
+                </section>
+
+
+                <section class="ls-card">
+                    <div class="ls-table-title ls-mb-4">
+                        Secure Payment
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+
+                        <div style="padding:14px;border:1px solid #e5e7eb;border-radius:14px;text-align:center;">
+                            💳
+                            <div style="font-size:13px;margin-top:8px;">256-bit SSL</div>
+                        </div>
+
+                        <div style="padding:14px;border:1px solid #e5e7eb;border-radius:14px;text-align:center;">
+                            🛡
+                            <div style="font-size:13px;margin-top:8px;">PCI Secure</div>
+                        </div>
+
+                    </div>
+                </section>
+
+            </div>
+
+
+            <!-- PAYMENT PANEL -->
+            <form method="post" asp-controller="EMI" asp-action="Payments" asp-route-emiId="@Model.Id" class="ls-card" style="padding:2rem;">
+                <input name="IsPaid" type="hidden" value="true" />
+                <input name="PaidAt" type="hidden" value="@DateTime.UtcNow" />
+                <div class="ls-table-title" style="font-size:20px;margin-bottom:1.5rem;">
+                    Choose Payment Method
+                </div>
+
+
+                <!-- METHODS -->
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;">
+
+                    <div class="ls-quick-action highlighted" onclick="showMethod('card')">
+                        <div class="ls-quick-action-icon">
+                            💳
+                        </div>
+                        Debit Card
+                    </div>
+
+                    <div class="ls-quick-action" onclick="showMethod('upi')">
+                        <div class="ls-quick-action-icon">
+                            📱
+                        </div>
+                        UPI
+                    </div>
+
+                    <div class="ls-quick-action">
+                        <div class="ls-quick-action-icon">
+                            🏦
+                        </div>
+                        Net Banking
+                    </div>
+
+                    <div class="ls-quick-action">
+                        <div class="ls-quick-action-icon">
+                            👛
+                        </div>
+                        Wallet
+                    </div>
+
+                </div>
+
+
+                <!-- CARD PAYMENT -->
+                <div id="cardMethod">
+
+                    <div class="ls-form-group">
+                        <label class="ls-label">
+                            Cardholder Name
+                        </label>
+                        <input class="ls-input" placeholder="Akash Pandey" />
+                    </div>
+
+                    <div class="ls-form-group">
+                        <label class="ls-label">
+                            Card Number
+                        </label>
+                        <input class="ls-input" placeholder="4242 4242 4242 4242" />
+                    </div>
+
+                    <div class="ls-grid-2">
+                        <div class="ls-form-group">
+                            <label class="ls-label">
+                                Expiry
+                            </label>
+                            <input class="ls-input" placeholder="MM/YY" />
+                        </div>
+
+                        <div class="ls-form-group">
+                            <label class="ls-label">
+                                CVV
+                            </label>
+                            <input class="ls-input" placeholder="***" />
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- UPI -->
+                <div id="upiMethod" style="display:none;">
+                    <div class="ls-form-group">
+                        <label class="ls-label">
+                            UPI ID
+                        </label>
+                        <input class="ls-input" placeholder="akash@upi" />
+                    </div>
+                </div>
+
+
+                <div class="ls-divider"></div>
+
+                <div class="ls-grid-2" style="margin-bottom:1.5rem;">
+
+                    <div>
+                        <div class="ls-text-muted">Payment Amount</div>
+                        <input value=@Model.EMIAmount class="ls-input" />
+                    </div>
+
+                    <div>
+                        <div class="ls-text-muted">Payment Type</div>
+                        <select class="ls-select">
+                            <option>EMI Payment</option>
+                            <option>Part Prepayment</option>
+                            <option>Full Closure</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <section style="background:#f8fbff;border:1px solid #dce8f4;padding:20px;border-radius:18px;margin-bottom:22px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+                        <span>EMI Amount</span>
+                        <strong>₹@Model.EMIAmount</strong>
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+                        <span>Processing Fee</span>
+                        <strong>₹120</strong>
+                    </div>
+
+                    <div class="ls-divider"></div>
+
+                    <div style="display:flex;justify-content:space-between;font-size:20px;font-weight:800;">
+                        <span>Total Payable</span>
+                        <span>₹@Model.EMIAmount</span>
+                    </div>
+                </section>
+
+
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+
+                    <label style="display:flex;gap:8px;font-size:13px;align-items:center;">
+                        <input type="checkbox" checked>
+                        Save payment method
+                    </label>
+
+                    <div style="display:flex;gap:12px;">
+                        <button class="ls-btn ls-btn-secondary">
+                            Cancel
+                        </button>
+
+                        <button  type="submit" class="ls-btn ls-btn-primary ls-btn-lg">
+                            🔒 Pay Securely
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <div style="margin-top:22px;text-align:center;color:#9ca3af;font-size:12px;">
+              
+                    Powered by Secure LoanSphere Payments • Visa • Mastercard • UPI
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- recent payments -->
+        <section class="ls-table-container" style="margin-top:28px;">
+
+            <div class="ls-table-header">
+                <div>
+                    <div class="ls-table-title">
+                        Recent Payments
+                    </div>
+                    <div class="ls-table-sub">
+                        Last repayment activity
+                    </div>
+                </div>
+            </div>
+
+            <table class="ls-data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Method</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Mar 27 2026</td>
+                        <td>Visa Card</td>
+                        <td class="ls-amount">₹5,125</td>
+                        <td><span class="ls-status ls-status-completed">Paid</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>Feb 27 2026</td>
+                        <td>UPI</td>
+                        <td class="ls-amount">₹5,125</td>
+                        <td><span class="ls-status ls-status-completed">Paid</span></td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </section>
+
+    </div>
+</div>
+
+
+<script>
+    function showMethod(type){
+    let card=document.getElementById('cardMethod');
+    let upi=document.getElementById('upiMethod');
+
+    if(type==='card'){
+    card.style.display='block';
+    upi.style.display='none';
+    }
+    if(type==='upi'){
+    card.style.display='none';
+    upi.style.display='block';
+    }
+    }
+
+
+</script>

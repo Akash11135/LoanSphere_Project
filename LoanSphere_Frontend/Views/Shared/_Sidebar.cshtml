@@ -1,0 +1,95 @@
+﻿@* Views/Shared/_Sidebar.cshtml *@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+    bool IsActive(string ctrl, string act = null) =>
+        string.Equals(controller, ctrl, StringComparison.OrdinalIgnoreCase)
+        && (act == null || string.Equals(action, act, StringComparison.OrdinalIgnoreCase));
+}
+
+<aside class="ls-sidebar" id="lsSidebar">
+
+    <!-- Brand -->
+    <div class="ls-sidebar-brand">
+        <div class="ls-brand-icon">
+            <i data-lucide="landmark"></i>
+        </div>
+        <div>
+            <div class="ls-brand-name">LoanSphere</div>
+            <div class="ls-brand-sub">Financial Portal</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="ls-nav">
+
+        <div class="ls-nav-section">
+            <div class="ls-nav-section-label">Overview</div>
+
+            <a class="ls-nav-item @(IsActive("Dashboard", "Index") ? "active" : "")"
+               asp-controller="Dashboard" asp-action="Index">
+                <i data-lucide="layout-dashboard"></i>
+                Dashboard
+            </a>
+
+            <a class="ls-nav-item @(IsActive("Loan") ? "active" : "")"
+               asp-controller="Loan" asp-action="Index">
+                <i data-lucide="file-text"></i>
+                My Loans
+            </a>
+
+            <a class="ls-nav-item @(IsActive("EMI") ? "active" : "")"
+               asp-controller="EMI" asp-action="Payments">
+                <i data-lucide="credit-card"></i>
+                EMI Payments
+            </a>
+        </div>
+
+        <div class="ls-nav-section">
+            <div class="ls-nav-section-label">Actions</div>
+
+            <a class="ls-nav-item @(IsActive("Dashboard", "ApplyNew") ? "active" : "")"
+               asp-controller="Dashboard" asp-action="ApplyNew">
+                <i data-lucide="plus-circle"></i>
+                Apply for Loan
+            </a>
+        </div>
+
+        <div class="ls-nav-section">
+            <div class="ls-nav-section-label">Support</div>
+
+            <a class="ls-nav-item @(IsActive("Home", "Settings") ? "active" : "")"
+               asp-controller="Home" asp-action="Settings">
+                <i data-lucide="settings"></i>
+                Settings
+            </a>
+
+            <a class="ls-nav-item @(IsActive("Home", "Contact") ? "active" : "")"
+               asp-controller="Home" asp-action="Contact">
+                <i data-lucide="headphones"></i>
+                Contact Us
+            </a>
+        </div>
+
+    </nav>
+
+    <!-- User -->
+    <div class="ls-sidebar-footer">
+        <div class="ls-user-pill">
+            <div class="ls-user-avatar">
+                @User.Identity.Name?.Substring(0, 1).ToUpper()
+            </div>
+            <div>
+                <div class="ls-user-name">@User.Identity.Name</div>
+                <div class="ls-user-role">Borrower Account</div>
+            </div>
+        </div>
+        <a asp-controller="Auth" asp-action="Logout"
+           class="ls-btn ls-btn-ghost ls-w-full"
+           style="margin-top:.5rem;justify-content:center;color:var(--ls-text-muted);font-size:.78rem;">
+            <i data-lucide="log-out"></i> Sign Out
+        </a>
+    </div>
+
+</aside>

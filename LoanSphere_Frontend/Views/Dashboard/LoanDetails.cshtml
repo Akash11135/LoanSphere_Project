@@ -1,295 +1,248 @@
 @model LoanManagement.Models.Loan
 
-@* STATIC VERSION NO MODEL*@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LoanSphere — Loan Details</title>
-    @* <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" /> *@
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <link rel="stylesheet" href="site.css" />
+@{
+    ViewData["Title"] = "Loan Details";
 
-    <style>
-        /* html, body {
-            margin: 0;
-            padding: 0;
-            background: #f3f4f6;
-        }
+    var paidCount = Model.EMISchedules.Count(x => x.IsPaid);
+    var totalEmis = Model.EMISchedules.Count();
+    var progress = totalEmis > 0 ? (paidCount * 100 / totalEmis) : 0;
+    var outstanding = Model.TotalPayable - Model.TotalPaid;
+    var nextEmi = Model.EMISchedules.FirstOrDefault(x => !x.IsPaid);
 
-        .ls-loan-hero {
-            background: linear-gradient(135deg,#0f172a,#1e3a5f);
-            border-radius: .85rem;
-            padding: 1.75rem 2rem;
-            color: #fff;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 1.5rem;
-            align-items: center;
-            margin-bottom: 1.5rem
-        }
+    string statusClass = Model.Status?.ToLower() == "approved"
+        ? "ls-status-active"
+        : "ls-status-pending";
+}
 
-        .ls-loan-hero-title {
-            font-size: .65rem;
-            font-weight: 700;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-bottom: .4rem
-        }
+<div class="ls-app">
 
-        .ls-loan-hero-amount {
-            font-size: 2.25rem;
-            font-weight: 700;
-            margin-bottom: .5rem
-        }
+    @await Html.PartialAsync("_Sidebar")
 
-        .ls-loan-hero-meta {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap
-        }
+    <main class="ls-main">
 
-        .ls-loan-hero-meta-item {
-            display: flex;
-            gap: .35rem;
-            font-size: .78rem;
-            color: #cbd5e1
-        }
-
-        .ls-loan-status-pill {
-            padding: .35rem .85rem;
-            border-radius: 2rem;
-            background: rgba(16,185,129,.15);
-            color: #10b981;
-            font-size: .72rem;
-            font-weight: 700
-        }
-
-        .ls-metrics-row {
-            display: grid;
-            grid-template-columns: repeat(4,1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem
-        }
-
-        .ls-metric-card {
-            background: #fff;
-            border: 1.5px solid #e5e7eb;
-            border-radius: .75rem;
-            padding: 1.1rem 1.25rem
-        }
-
-        .ls-metric-label {
-            font-size: .67rem;
-            font-weight: 700;
-            color: #9ca3af;
-            text-transform: uppercase
-        }
-
-        .ls-metric-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #0f172a
-        }
-
-        .ls-repay-progress-wrap, .ls-detail-section {
-            background: #fff;
-            border: 1.5px solid #e5e7eb;
-            border-radius: .75rem;
-            padding: 1.25rem 1.5rem;
-            margin-bottom: 1.5rem
-        }
-
-        .ls-repay-bar-bg {
-            height: 8px;
-            background: #f3f4f6;
-            border-radius: 9999px
-        }
-
-        .ls-repay-bar-fill {
-            height: 100%;
-            width: 50%;
-            background: linear-gradient(90deg,#0d6f4f,#10b981)
-        }
-
-        .ls-detail-section-header {
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #f3f4f6;
-            margin-bottom: 1rem
-        }
-
-        .ls-month-badge {
-            display: inline-flex;
-            width: 1.6rem;
-            height: 1.6rem;
-            border-radius: 50%;
-            align-items: center;
-            justify-content: center;
-            background: #f3f4f6;
-            font-size: .7rem;
-            font-weight: 700
-        }
-
-        .ls-emi-next td {
-            background: #f0fdf4
-        } */
-    </style>
-</head>
-<body class="ls-app">
-    <div class="ls-layout">
-        <div class="ls-sidebar">
-            <div class="ls-sidebar-brand"><span class="ls-brand-name">LoanSphere</span></div>
-            <a href="/Dashboard" class="ls-nav-item active">Dashboard</a>
-            <a href="/LoanPipeline" class="ls-nav-item">Loan Pipeline</a>
+        <!-- Back -->
+        <div class="ls-mb-3">
+            <a asp-controller="Dashboard" asp-action="Index"
+               class="ls-btn ls-btn-secondary ls-btn-sm" style="margin-bottom:1rem;">
+                <i data-lucide="arrow-left"></i>
+                Back to Dashboard
+            </a>
         </div>
 
-        <div style="display:flex;flex-direction:column;margin-left:9rem;">
-            <header class="ls-topbar">
-                <div>Loan Details — @Model.LoanId</div>
-            </header>
+        <!-- Hero -->
+        <div class="ls-hero-card ls-mb-4">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;flex-wrap:wrap;">
 
-            <main class="ls-main" style="margin-left:0;">
-
-                <div class="ls-hero-card">
-                    <div style="">
-                        <div class="ls-hero-label">Active Portfolio — LN:@Model.LoanId</div>
-                        <div class="ls-hero-value">Rs @Model.Amount.ToString("N2")</div>
-                        <div class="ls-hero-sub" style="gap:2rem; margin-top:1rem;">
-                            <span class="ls-loan-hero-meta-item">@Model.LoanType.ToUpper() LOAN</span>
-                            <span class="ls-loan-hero-meta-item">60 Month Term</span>
-                            <span class="ls-loan-hero-meta-item">@Model.InterestRate % Interest</span>
-                            <span class="ls-loan-hero-meta-item">Applied at: @Model.AppliedAt.ToString("yyyy MMM,dd")</span>
-                        </div>
+                <div>
+                    <div class="ls-hero-label">@Model.LoanType.ToUpper() LOAN · LN-@Model.LoanId</div>
+                    <div class="ls-hero-value" style="margin:10px 0 18px;">
+                        ₹ @Model.Amount.ToString("N0")
                     </div>
-                    <div>
-                        <span style="color:green; display:inline-flex;msrgin-top
-:1rem;"><i data-lucide="shield-check"></i>Active</span>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;">
+                        <span class="ls-tag"><i data-lucide="percent" style="width:12px;height:12px;"></i>@Model.InterestRate% Interest</span>
+                        <span class="ls-tag"><i data-lucide="calendar" style="width:12px;height:12px;"></i>@Model.TermInMonths Months</span>
+                        <span class="ls-status ls-status-pending" style="background:rgba(251,191,36,.15);color:#FCD34D;border:none;">
+                            Docs Pending
+                        </span>
+                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <a asp-controller="EMI" asp-action="Payments" class="ls-btn ls-btn-primary">
+                            <i data-lucide="credit-card"></i> Pay EMI
+                        </a>
+                        <a href="#" class="ls-btn" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);">
+                            <i data-lucide="file-down"></i> Statement
+                        </a>
+                        <a href="#" class="ls-btn" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.12);">
+                            <i data-lucide="paperclip"></i> Documents
+                        </a>
                     </div>
                 </div>
 
-                <div class="ls-metrics-row">
-                    <div class="ls-metric-card">
-                        <div class="ls-metric-label">Principal Amount</div>
-                        <div class="ls-metric-value">Rs @Model.Amount</div>
+                <div style="background:rgba(255,255,255,.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);padding:1.6rem 2rem;border-radius:18px;min-width:280px;">
+                    <div class="ls-stat-label" style="color:rgba(255,255,255,.5);margin-bottom:.4rem;">NEXT EMI DUE</div>
+                    <div style="font-size:2.2rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:6px;">
+                        ₹ @Model.EMIAmount.ToString("N0")
                     </div>
-                    <div class="ls-metric-card">
-                        <div class="ls-metric-label">Monthly EMI</div>
-                        <div class="ls-metric-value">Rs @Model.EMIAmount.ToString("N2")</div>
+                    <div style="font-size:.78rem;color:rgba(255,255,255,.55);margin-bottom:14px;">
+                        Due: @(nextEmi?.DueDate.ToString("dd MMM yyyy") ?? "—")
                     </div>
-                    <div class="ls-metric-card">
-                        <div class="ls-metric-label">Total Payable</div>
-                        <div class="ls-metric-value">Rs @Model.TotalPayable.ToString("N2")</div>
-                    </div>
-                    <div class="ls-metric-card">
-                        <div class="ls-metric-label">Amount Paid</div>
-                        <div class="ls-metric-value">Rs @Model.TotalPaid.ToString("N2")</div>
-                    </div>
+                    <span class="ls-status ls-status-@Model.Status" style="font-size:.72rem;">
+                        @Model.Status
+                    </span>
                 </div>
 
-                <div class="ls-repay-progress-wrap">
-                    <div style="display:flex;justify-content:space-between">
-                        <span>Repayment Progress</span>
-                        <span>50% Completed</span>
-                    </div>
-                    <div class="ls-repay-bar-bg">
-                        <div class="ls-repay-bar-fill"></div>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:10px;">
-                        <div>Paid: Rs 3,25,500</div>
-                        <div>Next Due: Rs 10,850 Mar 15 2026</div>
-                        <div>Remaining: Rs 3,25,500</div>
-                    </div>
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="ls-grid-4 ls-mb-4">
+            <div class="ls-stat-card">
+                <div class="ls-stat-icon" style="background:var(--ls-primary-light);">
+                    <i data-lucide="banknote" style="color:var(--ls-primary);width:20px;height:20px;"></i>
                 </div>
-
-                <div class="ls-detail-section">
-                    <div class="ls-detail-section-header">
-                        <h4>Loan Information</h4>
-                    </div>
-
-                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;">
-                        <div><b>Loan ID</b><br>LN-@Model.LoanId</div>
-                        <div><b>Borrower ID</b><br>USR-4589</div>
-                        <div><b>Loan Type</b><br>@Model.LoanType</div>
-                        <div><b>Principal</b><br>Rs @Model.Amount.ToString("N2")</div>
-                        <div><b>Interest</b><br>@Model.InterestRate%</div>
-                        <div><b>Tenure</b><br>@Model.TermInMonths Months</div>
-                        <div><b>EMI</b><br>Rs @Model.EMIAmount.ToString("N2")</div>
-                        <div><b>Total Payable</b><br>Rs @Model.TotalPayable.ToString("N2")</div>
-                        <div><b>Docs Verified</b><br>Yes ✓</div>
-                        <div><b>Applied</b><br>@Model.AppliedAt.ToString("yyyy MMM,dd")</div>
-                        <div><b>Updated</b><br>@Model.UpdatedAt.ToString("yyyy MMM,dd")</div>
-                        <div><b>Purpose</b><br>@Model.Purpose</div>
-                    </div>
+                <div class="ls-stat-label">Principal</div>
+                <div class="ls-stat-value">₹ @Model.Amount.ToString("N0")</div>
+                <div class="ls-stat-sub">Loan sanctioned</div>
+            </div>
+            <div class="ls-stat-card">
+                <div class="ls-stat-icon" style="background:var(--ls-accent-light);">
+                    <i data-lucide="calendar-check" style="color:var(--ls-accent);width:20px;height:20px;"></i>
                 </div>
+                <div class="ls-stat-label">Monthly EMI</div>
+                <div class="ls-stat-value">₹ @Model.EMIAmount.ToString("N0")</div>
+                <div class="ls-stat-sub">Auto debit enabled</div>
+            </div>
+            <div class="ls-stat-card">
+                <div class="ls-stat-icon" style="">
+                    <i data-lucide="trending-up" style="color:#D97706;width:20px;height:20px;"></i>
+                </div>
+                <div class="ls-stat-label">Total Payable</div>
+                <div class="ls-stat-value">₹ @Model.TotalPayable.ToString("N0")</div>
+                <div class="ls-stat-sub">Including interest</div>
+            </div>
+            <div class="ls-stat-card">
+                <div class="ls-stat-icon" style="">
+                    <i data-lucide="clock" style="color:#EF4444;width:20px;height:20px;"></i>
+                </div>
+                <div class="ls-stat-label">Outstanding</div>
+                <div class="ls-stat-value">₹ @outstanding.ToString("N0")</div>
+                <div class="ls-stat-sub">Pending repayment</div>
+            </div>
+        </div>
 
-                <div class="ls-table-container">
-                    <div class="ls-table-header">
-                        <h2 class="ls-table-title">EMI Schedule</h2>
-                        <h2 class="ls-table-sub">Detailed EMI schedule for the loan : LN-@Model.LoanId</h2>
-                    </div>
-                    <table class="ls-data-table">
-                        <thead >
+        <!-- Repayment Progress -->
+        <div class="ls-card ls-mb-4" style="padding:2rem;">
+            <div class="ls-flex-between ls-mb-2">
+                <h3 style="font-weight:700;font-size:.95rem;">Repayment Progress</h3>
+                <span class="ls-progress-label">@progress%</span>
+            </div>
+            <div class="ls-progress-wrap" style="height:10px;margin-bottom:1.8rem;">
+                <div class="ls-progress-fill" style="--ls-progress-width:@(progress)%"></div>
+            </div>
+            <div class="ls-grid-3">
+                <div class="info-box">
+                    <div class="info-label">Paid EMIs</div>
+                    <div class="info-value">@paidCount / @totalEmis</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Amount Paid</div>
+                    <div class="info-value">₹ @Model.TotalPaid.ToString("N0")</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Remaining Balance</div>
+                    <div class="info-value">₹ @outstanding.ToString("N0")</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loan Information -->
+        <div class="ls-card ls-mb-4" style="padding:2rem;">
+            <h3 style="font-weight:700;font-size:.95rem;margin-bottom:1.5rem;">Loan Information</h3>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;">
+                <div class="info-box">
+                    <div class="info-label">Loan ID</div>
+                    <div class="info-value" style="font-family:var(--ls-font-mono);font-size:.85rem;">LN-@Model.LoanId</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Borrower ID</div>
+                    <div class="info-value" style="font-family:var(--ls-font-mono);font-size:.85rem;">USR-@Model.UserId</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Purpose</div>
+                    <div class="info-value">@Model.Purpose</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Interest Rate</div>
+                    <div class="info-value">@Model.InterestRate%</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Tenure</div>
+                    <div class="info-value">@Model.TermInMonths Months</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-label">Last Updated</div>
+                    <div class="info-value">@Model.UpdatedAt.ToString("dd MMM yyyy")</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMI Schedule Table -->
+        <div class="ls-table-container">
+            <div class="ls-table-header">
+                <div>
+                    <div class="ls-table-title">EMI Schedule</div>
+                    <div class="ls-table-sub">@totalEmis Installments Generated</div>
+                </div>
+                <a href="#" class="ls-btn ls-btn-secondary ls-btn-sm">
+                    <i data-lucide="download"></i> Export
+                </a>
+            </div>
+
+            <div class="ls-table-scroll">
+                <table class="ls-data-table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Due Date</th>
+                            <th>EMI Amount</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>Balance</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var emi in Model.EMISchedules)
+                        {
                             <tr>
-                                <th>#</th>
-                                <th>Due Date</th>
-                                <th>EMI</th>
-                                <th>Principal</th>
-                                <th>Interest</th>
-                                <th>Balance</th>
-                                <th>Status</th>
+                                <td>
+                                    <div class="ls-table-entity">
+                                        <div class="ls-entity-avatar">@emi.MonthNumber</div>
+                                        <div class="ls-entity-name">EMI @emi.MonthNumber</div>
+                                    </div>
+                                </td>
+                                <td>@emi.DueDate.ToString("dd MMM yyyy")</td>
+                                <td class="ls-amount">₹ @emi.EMIAmount.ToString("N2")</td>
+                                <td>₹ @emi.PrincipalComponent.ToString("N2")</td>
+                                <td>₹ @emi.InterestComponent.ToString("N2")</td>
+                                <td class="ls-amount">₹ @emi.RemainingBalance.ToString("N2")</td>
+                                <td>
+                                    @if (emi.IsPaid)
+                                    {
+                                        <span class="ls-status ls-status-active">Paid</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="ls-status ls-status-pending">Pending</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (emi.IsPaid)
+                                    {
+                                        <button class="ls-btn ls-btn-sm ls-btn-secondary" disabled style="cursor:not-allowed;opacity:.5;">
+                                            <i data-lucide="check" style="width:13px;height:13px;"></i> Paid
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="EMI" asp-action="Payments"
+                                           asp-route-emiId="@emi.Id"
+                                           class="ls-btn ls-btn-sm ls-btn-primary">Pay Now</a>
+                                    }
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            
-                        @{
-                            foreach(var emi in Model.EMISchedules)
-                            {
-                                
-                                <tr>
-                                    <td><span class="ls-month-badge">@emi.MonthNumber</span></td>
-                                    <td>@emi.DueDate</td>
-                                    <td>@emi.EMIAmount</td>
-                                    <td>@emi.PrincipalComponent</td>
-                                    <td>@emi.InterestComponent</td>
-                                    <td>@emi.RemainingBalance</td>
-                                    <td>
-                                        @{
-                                            if (emi.IsPaid)
-                                            {
-                                                <span class="ls-status-compeleted" style="var(--ls-status-closed)">
-                                                    PAID
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                <span class="ls-status ls-status-pending " style="color:var(--ls-status-pending-text)">
-                                                    PENDING
-                                                </span>
-                                            }
-                                        }
-                                    </td>
-                                    
-                                </tr>
-                            }
                         }
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
+            </div>
 
-                    <div class="ls-form-group">
-                        6 of 12 EMIs paid · 6 remaining
-                        <br>
-                        Outstanding: Rs 3,25,500
-                    </div>
-
-                </div>
-
-            </main>
+            <div class="ls-table-footer">
+                <div class="ls-table-count">@paidCount paid · @(totalEmis - paidCount) remaining</div>
+            </div>
         </div>
-    </div>
-    <script>lucide.createIcons();</script>
-</body>
-</html>
 
+    </main>
+</div>
+
+<script>lucide.createIcons();</script>
