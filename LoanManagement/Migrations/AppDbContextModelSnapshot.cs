@@ -88,6 +88,12 @@ namespace LoanManagement.Migrations
                     b.Property<double>("InterestRate")
                         .HasColumnType("float");
 
+                    b.Property<bool>("IsRejected")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVerifiedByAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LoanType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -112,8 +118,9 @@ namespace LoanManagement.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LoanId");
 

@@ -6,38 +6,35 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LoanManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class EMISchedule : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<double>(
-                name: "EMIAmount",
-                table: "Loans",
-                type: "float",
-                nullable: false,
-                defaultValue: 0.0);
-
-            migrationBuilder.AddColumn<string>(
-                name: "LoanType",
-                table: "Loans",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<double>(
-                name: "TotalPaid",
-                table: "Loans",
-                type: "float",
-                nullable: false,
-                defaultValue: 0.0);
-
-            migrationBuilder.AddColumn<double>(
-                name: "TotalPayable",
-                table: "Loans",
-                type: "float",
-                nullable: false,
-                defaultValue: 0.0);
+            migrationBuilder.CreateTable(
+                name: "Loans",
+                columns: table => new
+                {
+                    LoanId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    InterestRate = table.Column<double>(type: "float", nullable: false),
+                    LoanType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TermInMonths = table.Column<int>(type: "int", nullable: false),
+                    Purpose = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DocsVerified = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AppliedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EMIAmount = table.Column<double>(type: "float", nullable: false),
+                    TotalPayable = table.Column<double>(type: "float", nullable: false),
+                    TotalPaid = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Loans", x => x.LoanId);
+                });
 
             migrationBuilder.CreateTable(
                 name: "EMISchedules",
@@ -78,21 +75,8 @@ namespace LoanManagement.Migrations
             migrationBuilder.DropTable(
                 name: "EMISchedules");
 
-            migrationBuilder.DropColumn(
-                name: "EMIAmount",
-                table: "Loans");
-
-            migrationBuilder.DropColumn(
-                name: "LoanType",
-                table: "Loans");
-
-            migrationBuilder.DropColumn(
-                name: "TotalPaid",
-                table: "Loans");
-
-            migrationBuilder.DropColumn(
-                name: "TotalPayable",
-                table: "Loans");
+            migrationBuilder.DropTable(
+                name: "Loans");
         }
     }
 }

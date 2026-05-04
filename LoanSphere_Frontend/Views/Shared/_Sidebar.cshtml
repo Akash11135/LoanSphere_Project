@@ -8,81 +8,115 @@
         && (act == null || string.Equals(action, act, StringComparison.OrdinalIgnoreCase));
 }
 
+@using System.IdentityModel.Tokens.Jwt
+@using System.Security.Claims
+
+@{
+    var token = Context.Request.Cookies["jwt"];
+    string userName = "User";
+    string role = "Borrower";
+    string email = "Email";
+
+    if (!string.IsNullOrEmpty(token))
+    {
+        token = token.Trim('"');
+
+        var handler = new JwtSecurityTokenHandler();
+        var jwt = handler.ReadJwtToken(token);
+
+        userName = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value ?? "User";
+        role = jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value ?? "Borrower";
+        email = jwt.Claims.FirstOrDefault(c=>c.Type == ClaimTypes.Email)?.Value ?? "Email";
+    }
+
+    var initial = userName.Substring(0, 1).ToUpper();
+}
+
+
 <aside class="ls-sidebar" id="lsSidebar">
 
-    <!-- Brand -->
-    <div class="ls-sidebar-brand">
-        <div class="ls-brand-icon">
-            <i data-lucide="landmark"></i>
+    <a asp-controller="Home" asp-action="Index" style="text-decoration:none ;color:var(--ls-primary)">
+        <div class="ls-sidebar-brand">
+            <div class="ls-brand-icon">
+                <i data-lucide="landmark" style="cursor:pointer"></i>
+            </div>
+            <div>
+                <div class="ls-brand-name">LoanSphere</div>
+                <div class="ls-brand-sub">Financial Portal</div>
+            </div>
         </div>
-        <div>
-            <div class="ls-brand-name">LoanSphere</div>
-            <div class="ls-brand-sub">Financial Portal</div>
-        </div>
-    </div>
+    </a>
 
+    @{
+        if(role!= "Admin")
+        {
+            <nav class="ls-nav">
+
+                <div class="ls-nav-section">
+                    <div class="ls-nav-section-label">Overview</div>
+
+                    <a class="ls-nav-item @(IsActive("Dashboard", "Index") ? "active" : "")"
+                       asp-controller="Dashboard" asp-action="Index">
+                        <i data-lucide="layout-dashboard"></i>
+                        Dashboard
+                    </a>
+
+                    <a class="ls-nav-item @(IsActive("Loan") ? "active" : "")"
+                       asp-controller="dASHBOARD" asp-action="ViewAllLoans">
+                        <i data-lucide="file-text"></i>
+                        My Loans
+                    </a>
+
+            
+                </div>
+
+                <div class="ls-nav-section">
+                    <div class="ls-nav-section-label">Actions</div>
+
+                    <a class="ls-nav-item @(IsActive("Dashboard", "ApplyNew") ? "active" : "")"
+                       asp-controller="Dashboard" asp-action="ApplyNew">
+                        <i data-lucide="plus-circle"></i>
+                        Apply for Loan
+                    </a>
+                </div>
+
+                <div class="ls-nav-section">
+                    <div class="ls-nav-section-label">Support</div>
+
+                    <a class="ls-nav-item @(IsActive("Home", "Settings") ? "active" : "")"
+                       asp-controller="Home" asp-action="Settings">
+                        <i data-lucide="settings"></i>
+                        Settings
+                    </a>
+
+                    <a class="ls-nav-item @(IsActive("Home", "Contact") ? "active" : "")"
+                       asp-controller="Home" asp-action="ContactUs">
+                        <i data-lucide="headphones"></i>
+                        Contact Us
+                    </a>
+                    <a class="ls-nav-item @(IsActive("Home", "Contact") ? "active" : "")"
+                       asp-controller="Home" asp-action="AboutUs">
+                        <i data-lucide="user"></i>
+                        About Us
+                    </a>
+                </div>
+            </nav>
+        }
+    }
     <!-- Navigation -->
-    <nav class="ls-nav">
-
-        <div class="ls-nav-section">
-            <div class="ls-nav-section-label">Overview</div>
-
-            <a class="ls-nav-item @(IsActive("Dashboard", "Index") ? "active" : "")"
-               asp-controller="Dashboard" asp-action="Index">
-                <i data-lucide="layout-dashboard"></i>
-                Dashboard
-            </a>
-
-            <a class="ls-nav-item @(IsActive("Loan") ? "active" : "")"
-               asp-controller="Loan" asp-action="Index">
-                <i data-lucide="file-text"></i>
-                My Loans
-            </a>
-
-            <a class="ls-nav-item @(IsActive("EMI") ? "active" : "")"
-               asp-controller="EMI" asp-action="Payments">
-                <i data-lucide="credit-card"></i>
-                EMI Payments
-            </a>
-        </div>
-
-        <div class="ls-nav-section">
-            <div class="ls-nav-section-label">Actions</div>
-
-            <a class="ls-nav-item @(IsActive("Dashboard", "ApplyNew") ? "active" : "")"
-               asp-controller="Dashboard" asp-action="ApplyNew">
-                <i data-lucide="plus-circle"></i>
-                Apply for Loan
-            </a>
-        </div>
-
-        <div class="ls-nav-section">
-            <div class="ls-nav-section-label">Support</div>
-
-            <a class="ls-nav-item @(IsActive("Home", "Settings") ? "active" : "")"
-               asp-controller="Home" asp-action="Settings">
-                <i data-lucide="settings"></i>
-                Settings
-            </a>
-
-            <a class="ls-nav-item @(IsActive("Home", "Contact") ? "active" : "")"
-               asp-controller="Home" asp-action="Contact">
-                <i data-lucide="headphones"></i>
-                Contact Us
-            </a>
-        </div>
-
-    </nav>
+    
 
     <!-- User -->
     <div class="ls-sidebar-footer">
         <div class="ls-user-pill">
             <div class="ls-user-avatar">
-                @User.Identity.Name?.Substring(0, 1).ToUpper()
+                @userName?.Substring(0, 1).ToUpper()
             </div>
             <div>
-                <div class="ls-user-name">@User.Identity.Name</div>
-                <div class="ls-user-role">Borrower Account</div>
+                <div class="ls-user-name">@userName</div>
+                <div class="ls-user-role">@role Account</div>
+         
+
             </div>
         </div>
         <a asp-controller="Auth" asp-action="Logout"
@@ -91,5 +125,7 @@
             <i data-lucide="log-out"></i> Sign Out
         </a>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script>lucide.createIcons();</script>
 </aside>

@@ -74,18 +74,9 @@
     </style>
 </head>
 <body class="ls-app">
-    <div class="ls-layout">
-
-        <div class="ls-sidebar">
-            <div class="ls-sidebar-brand">
-                <span class="ls-brand-name">LoanSphere</span>
-            </div>
-            <a href="/Dashboard" class="ls-nav-item">Dashboard</a>
-            <a asp-action="ContactUs" asp-controller="Home" class="ls-nav-item active">About Us</a>
-            <a asp-action="AboutUs" asp-controller="Home" class="ls-nav-item">Contact</a>
-        </div>
-
-        <div style="display:flex;flex-direction:column;margin-left:9rem;width:100%;">
+        @await Html.PartialAsync("_Sidebar")
+    <div class="ls-main">
+        <div style="display:flex;flex-direction:column;width:80%;font-size:14px">
 
             <header class="ls-topbar">
                 <span class="ls-page-title">About LoanSphere</span>

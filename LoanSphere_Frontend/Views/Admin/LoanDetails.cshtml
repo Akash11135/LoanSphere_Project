@@ -1,4 +1,4 @@
-@model LoanManagement.Models.Loan
+﻿@model LoanManagement.Models.Loan
 
 @{
     ViewData["Title"] = "Loan Details";
@@ -22,7 +22,7 @@
 
         <!-- Back -->
         <div class="ls-mb-3">
-            <a asp-controller="Dashboard" asp-action="Index"
+            <a asp-controller="Admin" asp-action="Index"
                class="ls-btn ls-btn-secondary ls-btn-sm" style="margin-bottom:1rem;">
                 <i data-lucide="arrow-left"></i>
                 Back to Dashboard
@@ -46,9 +46,9 @@
                         </span>
                     </div>
                     <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                        <a asp-controller="EMI" asp-action="Payments" class="ls-btn ls-btn-primary">
+                        @* <a asp-controller="EMI" asp-action="Payments" class="ls-btn ls-btn-primary">
                             <i data-lucide="credit-card"></i> Pay EMI
-                        </a>
+                        </a> *@
                         <a href="#" class="ls-btn" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);">
                             <i data-lucide="file-down"></i> Statement
                         </a>
@@ -226,9 +226,9 @@
                                     }
                                     else
                                     {
-                                        <a asp-controller="EMI" asp-action="Payments"
-                                           asp-route-emiId="@emi.Id"
-                                           class="ls-btn ls-btn-sm ls-btn-primary">Pay Now</a>
+                                        <button class="ls-btn ls-btn-sm ls-btn-secondary" disabled style="cursor:not-allowed;opacity:.5;">
+                                            <i data-lucide="circle-slash-2" style="width:13px;height:13px;"></i> Not Paid
+                                        </button>
                                     }
                                 </td>
                             </tr>

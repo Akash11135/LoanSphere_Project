@@ -1,0 +1,94 @@
+﻿@model LoanManagement.DTOs.ReviewDto
+
+@{
+    ViewData["Title"] = "Review Loan";
+}
+
+<div class="ls-layout">
+
+    @* @await Html.PartialAsync("_Sidebar") *@
+
+    <div style="display:flex;flex-direction:column;width:100%;">
+
+        <!-- Topbar -->
+        <header class="ls-topbar">
+            <span class="ls-page-title">Review Loan</span>
+        </header>
+
+        <main class="ls-main">
+
+            <div class="ls-card" style="max-width:700px;margin:auto;">
+
+                <div class="ls-mb-6">
+                    <h3 class="ls-page-title">Loan Review Decision</h3>
+                    <div class="ls-text-muted">
+                        Verify documents and approve or reject the loan application
+                    </div>
+                </div>
+
+                <form asp-action="ReviewLoan" asp-controller="Admin" method="post" >
+
+                    <!-- Hidden LoanId -->
+                    <input type="hidden" asp-for="LoanId" />
+
+                    <!-- Docs Verified -->
+                    <div class="ls-form-group">
+                        <label class="ls-label">Documents Verified</label>
+                        <select asp-for="DocsVerified" class="ls-select">
+                            <option value="true">Verified</option>
+                            <option value="false">Not Verified</option>
+                        </select>
+                        <span asp-validation-for="DocsVerified" class="ls-form-error"></span>
+                    </div>
+
+                    <!-- Approval Decision -->
+                    <div class="ls-form-group">
+                        <label class="ls-label">Admin Decision</label>
+
+                        <div style="display:flex;gap:1rem;align-items:center;">
+
+                            <label style="display:flex;gap:.4rem;align-items:center;">
+                                <input type="radio" name="IsRejected" value="false" checked />
+                                <span class="ls-text-success">Approve</span>
+                            </label>
+
+                            <label style="display:flex;gap:.4rem;align-items:center;">
+                                <input type="radio" name="IsRejected" value="true" />
+                                <span class="ls-text-danger">Reject</span>
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <!-- Verified by Admin -->
+                    <div class="ls-form-group">
+                        <label style="display:flex;gap:.5rem;align-items:center;">
+                            <input asp-for="IsVerifiedByAdmin" type="checkbox" />
+                            <span class="ls-label">Mark as Verified by Admin</span>
+                        </label>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="ls-form-actions">
+                        <a asp-action="Index" asp-controller="Admin" class="ls-btn ls-btn-secondary">
+                            Cancel
+                        </a>
+
+                        <div class="ls-form-actions-right">
+                            <button type="submit" class="ls-btn ls-btn-primary">
+                                Submit Review
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </main>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

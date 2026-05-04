@@ -1,0 +1,122 @@
+﻿@model List<LoanManagement.Models.Loan>
+
+<body class="ls-app">
+
+    <div class="ls-layout">
+
+        @await Html.PartialAsync("_Sidebar")
+
+        <div class="ls-main">
+
+            <div style="max-width:1200px; margin:0 auto;">
+
+                <!-- HEADER -->
+                <div class="ls-mb-6">
+                    <h2 class="ls-page-title">All Loans</h2>
+                    <p class="ls-text-muted">Overview of all your active and past loans</p>
+                </div>
+
+                <!-- HERO -->   
+                <div class="ls-hero-card ls-mb-6">
+                    <div class="ls-hero-label">Portfolio Overview</div>
+                    <div class="ls-hero-value">
+                        Rs @Model.Sum(x => x.Amount).ToString("N2")
+                    </div>
+                    <div class="ls-hero-sub">
+                        @Model.Count loan(s)
+                    </div>
+                </div>
+
+                <!-- STATS -->
+                <div class="ls-grid-4 ls-mb-6">
+
+                    <div class="ls-stat-card">
+                        <div class="ls-stat-label">Total Loans</div>
+                        <div class="ls-stat-value">@Model.Count</div>
+                    </div>
+
+                    <div class="ls-stat-card">
+                        <div class="ls-stat-label">Total Paid</div>
+                        <div class="ls-stat-value">
+                            Rs @Model.Sum(x => x.TotalPaid).ToString("N2")
+                        </div>
+                    </div>
+
+                    <div class="ls-stat-card">
+                        <div class="ls-stat-label">Outstanding</div>
+                        <div class="ls-stat-value">
+                            Rs @Model.Sum(x => (x.TotalPayable - x.TotalPaid)).ToString("N2")
+                        </div>
+                    </div>
+
+                    <div class="ls-stat-card">
+                        <div class="ls-stat-label">Avg EMI</div>
+                        <div class="ls-stat-value">
+                            Rs @(Model.Average(x => x.EMIAmount).ToString("N0"))
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- TABLE -->
+                <div class="ls-table-container">
+
+                    <div class="ls-table-header">
+                        <div>
+                            <div class="ls-table-title">Loan Portfolio</div>
+                            <div class="ls-table-sub">Detailed list</div>
+                        </div>
+                    </div>
+
+                    <table class="ls-data-table">
+                        <thead>
+                            <tr>
+                                <th>Loan</th>
+                                <th>Amount</th>
+                                <th>EMI</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var loan in Model)
+                            {
+                                var progress = loan.TotalPayable > 0
+                                ? (loan.TotalPaid / loan.TotalPayable) * 100
+                                : 0;
+
+                                <tr>
+                                    <td>@loan.Purpose</td>
+                                    <td>Rs @loan.Amount</td>
+                                    <td>Rs @loan.EMIAmount</td>
+
+                                    <td>
+                                        <span class="ls-status ls-status-@loan.Status.ToLower()">
+                                            @loan.Status
+                                        </span>
+                                    </td>
+
+                                    <td>@progress.ToString("0")%</td>
+
+                                    <td>
+                                        <a asp-action="LoanDetails"
+                                           asp-controller="Dashboard"
+                                           asp-route-loanId="@loan.LoanId"
+                                           class="ls-btn ls-btn-primary ls-btn-sm">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</body>

@@ -328,13 +328,13 @@
 <body class="ls-app">
 <div class="ls-layout">
 
-    <!-- ── Sidebar Nav ── -->
+   
         @await Html.PartialAsync("_Sidebar")
 
-    <!-- ── Page Body ── -->
+  
     <div style="display:flex;flex-direction:column;margin-left:9rem;min-height:100vh;">
 
-        <!-- Topbar -->
+      
         <header class="ls-topbar">
             <span class="ls-page-title">New Loan Application</span>
             <div class="ls-search-bar">
@@ -638,6 +638,10 @@
     });
 
     updateReview();
+
 </script>
 </body>
 </html>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,113 +1,120 @@
-﻿@{
-    Layout = null;
+﻿@model LoanSphere_Frontend.DTOs.RegisterAdminDto
+@{
+    ViewData["Title"] = "Register";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
+<div class="ls-app">
+    <div style="display:flex;min-height:100vh;">
 
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap"
-          rel="stylesheet">
+        <!-- LEFT IMAGE SECTION -->
+        <div style="flex:1;background:url('/images/loan-bg.jpg') center/cover no-repeat;position:relative;">
+            <div style="position:absolute;inset:0;background:rgba(0,51,88,0.75);"></div>
 
-    <style>
-
-        body {
-            font-family: Manrope;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #f8fafc;
-        }
-
-        .box {
-            width: 450px;
-            background: white;
-            padding: 45px;
-            border-radius: 22px;
-            box-shadow: 0 20px 60px rgba(0,0,0,.08);
-        }
-
-        h1 {
-            margin-bottom: 30px;
-            color: #1e3a5f;
-        }
-
-        input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 18px;
-            border: 1px solid #dbe2ea;
-            border-radius: 12px;
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            background: #0f172a;
-            color: white;
-            font-weight: 700;
-            border-radius: 12px;
-        }
-
-        .success {
-            background: #dcfce7;
-            padding: 14px;
-            border-radius: 10px;
-            color: #15803d;
-            margin-bottom: 15px;
-        }
-
-        a {
-            display: block;
-            margin-top: 20px;
-            text-align: center;
-            font-weight: 700;
-            text-decoration: none;
-            color: #1e3a5f;
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="box">
-
-        <h1>Create Account</h1>
-
-        @if (ViewBag.Success != null)
-        {
-            <div class="success">
-                @ViewBag.Success
+            <div style="position:relative;color:white;padding:3rem;">
+                <h1 style="font-size:2.5rem;font-weight:700;">LoanSphere</h1>
+                <p style="margin-top:1rem;font-size:1rem;">
+                    Secure, scalable lending platform for modern finance.
+                </p>
             </div>
-        }
+        </div>
 
-        <form method="post">
+        <!-- RIGHT FORM SECTION -->
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;">
 
-            <input name="fullname"
-                   placeholder="Full Name" />
+            <div class="ls-form-container" style="width:420px;">
 
-            <input name="email"
-                   placeholder="Email" />
+                <h2 class="ls-page-title" style="margin-bottom:1rem;">Create Account</h2>
 
-            <input type="password"
-                   name="password"
-                   placeholder="Password" />
+                <!-- Toggle Buttons -->
+                <div style="display:flex;gap:.5rem;margin-bottom:1rem;">
+                    <button type="button" onclick="switchRole('customer')" class="ls-btn ls-btn-primary" id="custBtn">Customer</button>
+                    <button type="button" onclick="switchRole('admin')" class="ls-btn ls-btn-secondary" id="adminBtn">Admin</button>
+                </div>
 
-            <button>
-                Register
-            </button>
+                <form asp-action="Register" method="post">
 
-        </form>
+                    <!-- Full Name -->
+                    <div class="ls-form-group">
+                        <label class="ls-label">Full Name</label>
+                        <input name="FullName" class="ls-input" />
+                        <span asp-validation-for="FullName" class="ls-form-error"></span>
+                    </div>
 
-        <a asp-controller="Auth"
-           asp-action="Login">
-            Back to Login
-        </a>
+                    <!-- Email -->
+                    <div class="ls-form-group">
+                        <label class="ls-label">Email</label>
+                        <input name="Email" class="ls-input" />
+                        <span asp-validation-for="Email" class="ls-form-error"></span>
+                    </div>
 
+                    <!-- Phone -->
+                    <div class="ls-form-group">
+                        <label class="ls-label">Phone</label>
+                        <input name="Phone" class="ls-input" />
+                        <span asp-validation-for="Phone" class="ls-form-error"></span>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="ls-form-group">
+                        <label class="ls-label">Password</label>
+                        <input type="password" name="Password" class="ls-input" />
+                        <span asp-validation-for="Password" class="ls-form-error"></span>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="ls-form-group">
+                        <label class="ls-label">Confirm Password</label>
+                        <input type="password" name="ConfirmPassword" class="ls-input" />
+                        <span asp-validation-for="ConfirmPassword" class="ls-form-error"></span>
+                    </div>
+
+                    <!-- ADMIN SECRET -->
+                    <div class="ls-form-group" id="adminKey" style="display:none;">
+                        <label class="ls-label">Admin Secret Key</label>
+                        <input name="AdminSecretKey" class="ls-input" />
+                    </div>
+
+                    <button type="submit" class="ls-btn ls-btn-primary ls-w-full">
+                        Register
+                    </button>
+
+                </form>
+
+                <!-- LOGIN BUTTON -->
+                <div style="margin-top:1rem;text-align:center;">
+                    <span class="ls-text-muted">Already have an account?</span>
+                    <a asp-controller="Auth" asp-action="Login" class="ls-btn ls-btn-secondary" style="margin-left:.5rem;">
+                        Login
+                    </a>
+                </div>
+
+            </div>
+        </div>
     </div>
+</div>
 
-</body>
-</html>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function switchRole(role) {
+            const adminKey = document.getElementById("adminKey");
+            const adminBtn = document.getElementById("adminBtn");
+            const custBtn = document.getElementById("custBtn");
+
+            if (role === "admin") {
+                adminKey.style.display = "block";
+                adminBtn.classList.add("ls-btn-primary");
+                adminBtn.classList.remove("ls-btn-secondary");
+                custBtn.classList.remove("ls-btn-primary");
+                custBtn.classList.add("ls-btn-secondary");
+            } else {
+                adminKey.style.display = "none";
+                custBtn.classList.add("ls-btn-primary");
+                custBtn.classList.remove("ls-btn-secondary");
+                adminBtn.classList.remove("ls-btn-primary");
+                adminBtn.classList.add("ls-btn-secondary");
+            }
+        }
+    </script>
+}

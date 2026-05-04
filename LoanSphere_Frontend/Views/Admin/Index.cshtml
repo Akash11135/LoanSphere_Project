@@ -1,0 +1,691 @@
+﻿@model LoanManagement.DTOs.AdminDashboardDto
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard — LoanSphere</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* ── Admin-only extras (no conflicts with site.css) ── */
+        .ls-admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .375rem;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--ls-primary-400);
+            background: rgba(0,85,137,.12);
+            border: 1px solid rgba(0,85,137,.2);
+            padding: .25rem .625rem;
+            border-radius: var(--ls-radius-full);
+            margin-bottom: .875rem;
+        }
+
+        /* Coloured left-border variants for stat cards */
+        .ls-stat-card.success::before {
+            background: var(--ls-success);
+        }
+
+        .ls-stat-card.warning::before {
+            background: var(--ls-warning);
+        }
+
+        .ls-stat-card.danger::before {
+            background: var(--ls-danger);
+        }
+
+        /* Summary strip */
+        .ls-summary-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-radius: var(--ls-radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--ls-gray-200);
+            box-shadow: var(--ls-shadow-card);
+        }
+
+        .ls-summary-item {
+            background: var(--ls-white);
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            border-right: 1px solid var(--ls-gray-100);
+        }
+
+            .ls-summary-item:last-child {
+                border-right: none;
+            }
+
+        .ls-summary-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .ls-summary-label {
+            font-size: .68rem;
+            color: var(--ls-gray-500);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .ls-summary-value {
+            font-size: .95rem;
+            font-weight: 700;
+            font-family: var(--ls-font-mono);
+            margin-top: .1rem;
+        }
+
+        /* Section divider label */
+        .ls-section-label {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--ls-gray-400);
+            display: flex;
+            align-items: center;
+            gap: .625rem;
+            margin-bottom: -.25rem;
+        }
+
+            .ls-section-label::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: var(--ls-gray-200);
+            }
+
+        /* Docs verified pill */
+        .ls-docs-pill {
+            font-size: .62rem;
+            font-weight: 700;
+            padding: .15rem .5rem;
+            border-radius: var(--ls-radius-sm);
+        }
+
+        .ls-docs-yes {
+            background: var(--ls-success-light);
+            color: var(--ls-success);
+        }
+
+        .ls-docs-no {
+            background: var(--ls-danger-light);
+            color: var(--ls-danger);
+        }
+
+        /* Loan-type tag colour variants */
+        .ls-tag-personal {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .ls-tag-vehicle {
+            background: #ede9fe;
+            color: #6d28d9;
+            border-color: #ddd6fe;
+        }
+
+        .ls-tag-education {
+            background: var(--ls-warning-light);
+            color: var(--ls-warning);
+            border-color: #fde68a;
+        }
+
+        .ls-tag-home {
+            background: var(--ls-success-light);
+            color: var(--ls-success);
+            border-color: #a7f3d0;
+        }
+
+        /* Repayment mini-progress */
+        .ls-mini-progress {
+            width: 72px;
+            height: 5px;
+            background: var(--ls-gray-200);
+            border-radius: var(--ls-radius-full);
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .ls-mini-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ls-primary-600), var(--ls-primary-400));
+            border-radius: var(--ls-radius-full);
+        }
+
+        /* Approve / Reconsider button variants */
+        .ls-btn-approve {
+            background: var(--ls-success-light);
+            color: var(--ls-success);
+            border-color: #a7f3d0;
+        }
+
+            .ls-btn-approve:hover {
+                background: #bbf7d0;
+                color: var(--ls-success);
+                text-decoration: none;
+            }
+
+        .ls-btn-reconsider {
+            background: var(--ls-warning-light);
+            color: var(--ls-warning);
+            border-color: #fde68a;
+        }
+
+            .ls-btn-reconsider:hover {
+                background: #fde68a;
+                color: var(--ls-warning);
+                text-decoration: none;
+            }
+
+        /* Action button row keeps icons tight */
+        .ls-action-row {
+            display: flex;
+            align-items: center;
+            gap: .375rem;
+        }
+
+        /* Empty state */
+        .ls-empty-state {
+            text-align: center;
+            color: var(--ls-gray-400);
+            padding: 2.5rem 1rem;
+            font-size: .8rem;
+        }
+
+            .ls-empty-state i {
+                display: block;
+                margin: 0 auto .5rem;
+            }
+
+        /* Rejected avatar tint */
+        .ls-entity-avatar.danger {
+            background: var(--ls-danger-light);
+            color: var(--ls-danger);
+        }
+
+        .ls-entity-avatar.success {
+            background: var(--ls-success-light);
+            color: var(--ls-success);
+        }
+    </style>
+</head>
+
+<body class="ls-app">
+    <div class="ls-layout">
+
+     
+        @await Html.PartialAsync("_Sidebar") 
+
+        <div style="display:flex;flex-direction:column;width:100%;">
+
+          
+            <header class="ls-topbar">
+                <span class="ls-page-title">Admin Overview</span>
+
+                <div class="ls-search-bar">
+                    <i data-lucide="search" style="width:14px;height:14px;color:var(--ls-gray-400);flex-shrink:0;"></i>
+                    <input type="text" placeholder="Search loans, users…" />
+                </div>
+
+                <div class="ls-topbar-right">
+                    <button class="ls-icon-btn" title="Notifications">
+                        <i data-lucide="bell" style="width:17px;height:17px;"></i>
+                        <span class="ls-notif-dot"></span>
+                    </button>
+                    <button class="ls-icon-btn" title="Refresh">
+                        <i data-lucide="refresh-cw" style="width:17px;height:17px;"></i>
+                    </button>
+                    <div class="ls-avatar-pill" title="Admin Portal">AD</div>
+                </div>
+            </header>
+
+            <!-- ══════════════ MAIN CONTENT ══════════════ -->
+            <main class="ls-main" style="margin-left:0;">
+
+                <!-- ── Hero + Quick Actions ── -->
+                <div class="ls-grid-2 ls-mb-6">
+
+                    <div class="ls-hero-card">
+                        <div class="ls-admin-badge">
+                            <i data-lucide="shield-check" style="width:10px;height:10px;"></i>
+                            Admin Control Panel
+                        </div>
+                        <div class="ls-hero-label">Total Portfolio Under Management</div>
+                        <div class="ls-hero-value">Rs @Model.TotalAmount.ToString("N2")</div>
+                        <div class="ls-hero-sub">
+                            <i data-lucide="activity" style="width:12px;height:12px;"></i>
+                            @Model.ActiveLoans.Count active &nbsp;·&nbsp;
+                            @Model.ReviewLoans.Count in review &nbsp;·&nbsp;
+                            @Model.RejectedLoans.Count rejected
+                        </div>
+                        <div style="margin-top:2rem;display:flex;gap:.75rem;">
+                            <a href="#review" class="ls-btn ls-btn-secondary" style="border-color:var(--ls-primary-200);color:var(--ls-primary-100);background:rgba(255,255,255,.1);">
+                                <i data-lucide="clipboard-check" style="width:13px;height:13px;"></i>
+                                Review Queue
+                            </a>
+                            <a href="#" class="ls-btn ls-btn-secondary" style="border-color:var(--ls-primary-200);color:var(--ls-primary-100);background:rgba(255,255,255,.1);">
+                                <i data-lucide="download" style="width:13px;height:13px;"></i>
+                                Export Report
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="ls-card" style="padding:1.25rem;">
+                        <div class="ls-table-title ls-mb-4" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ls-gray-500);font-weight:600;">Admin Actions</div>
+                        <div class="ls-grid-2" style="gap:.75rem;">
+                            <a href="#review" class="ls-quick-action highlighted">
+                                <div class="ls-quick-action-icon"><i data-lucide="user-check" style="width:16px;height:16px;"></i></div>
+                                Approve Loan
+                            </a>
+                            <a href="#" class="ls-quick-action">
+                                <div class="ls-quick-action-icon"><i data-lucide="user-plus" style="width:16px;height:16px;"></i></div>
+                                Add User
+                            </a>
+                            <a href="#" class="ls-quick-action">
+                                <div class="ls-quick-action-icon"><i data-lucide="download" style="width:16px;height:16px;"></i></div>
+                                Export Data
+                            </a>
+                            <a href="#" class="ls-quick-action">
+                                <div class="ls-quick-action-icon" style="background:var(--ls-warning-light);color:var(--ls-warning);"><i data-lucide="sliders" style="width:16px;height:16px;"></i></div>
+                                Loan Config
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ── Stat Cards ── -->
+                <div class="ls-grid-4 ls-mb-6">
+
+                    <div class="ls-stat-card">
+                        <div class="ls-stat-label">Total Disbursed</div>
+                        <div class="ls-stat-value">Rs @Model.TotalAmount.ToString("N0")</div>
+                        <div class="ls-stat-sub" style="display:flex;align-items:center;gap:.25rem;">
+                            <i data-lucide="trending-up" style="width:12px;height:12px;color:var(--ls-success);"></i>
+                            <span style="color:var(--ls-success);font-weight:600;">+12.4%</span>&nbsp;this month
+                        </div>
+                    </div>
+
+                    <div class="ls-stat-card success">
+                        <div class="ls-stat-label">Active Loans</div>
+                        <div class="ls-stat-value">@Model.ActiveLoans.Count</div>
+                        <div class="ls-stat-sub">
+                            <span style="width:6px;height:6px;border-radius:50%;background:var(--ls-success);display:inline-block;margin-right:.25rem;"></span>
+                            Repayment in progress
+                        </div>
+                    </div>
+
+                    <div class="ls-stat-card warning">
+                        <div class="ls-stat-label">In Review</div>
+                        <div class="ls-stat-value">@Model.ReviewLoans.Count</div>
+                        <div class="ls-stat-sub">
+                            <span style="width:6px;height:6px;border-radius:50%;background:var(--ls-warning);display:inline-block;margin-right:.25rem;"></span>
+                            Awaiting admin decision
+                        </div>
+                    </div>
+
+                    <div class="ls-stat-card danger">
+                        <div class="ls-stat-label">Rejected</div>
+                        <div class="ls-stat-value">@Model.RejectedLoans.Count</div>
+                        <div class="ls-stat-sub">Declined applications</div>
+                    </div>
+
+                </div>
+
+                <!-- ── Portfolio Summary Strip ── -->
+                <div class="ls-summary-strip ls-mb-6">
+                    <div class="ls-summary-item">
+                        <div class="ls-summary-dot" style="background:var(--ls-success);"></div>
+                        <div>
+                            <div class="ls-summary-label">Total Collected (EMI)</div>
+                            <div class="ls-summary-value ls-text-success">
+                                Rs @Model.ActiveLoans.Sum(l => l.TotalPaid).ToString("N2")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ls-summary-item">
+                        <div class="ls-summary-dot" style="background:var(--ls-primary-500);"></div>
+                        <div>
+                            <div class="ls-summary-label">Total Receivable (Active)</div>
+                            <div class="ls-summary-value ls-text-primary">
+                                Rs @Model.ActiveLoans.Sum(l => l.TotalPayable).ToString("N2")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ls-summary-item">
+                        <div class="ls-summary-dot" style="background:var(--ls-warning);"></div>
+                        <div>
+                            <div class="ls-summary-label">Pending Requested Amount</div>
+                            <div class="ls-summary-value" style="color:var(--ls-warning);">
+                                Rs @Model.ReviewLoans.Sum(l => l.Amount).ToString("N2")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ═══════ REVIEW QUEUE ═══════ -->
+                <div class="ls-section-label ls-mb-4">Review Queue</div>
+
+                <div class="ls-table-container ls-mb-6" id="review">
+                    <div class="ls-table-header">
+                        <div>
+                            <div class="ls-table-title">Loans Pending Admin Review</div>
+                            <div class="ls-table-sub">New applications — awaiting document verification &amp; approval decision</div>
+                        </div>
+                        <div style="display:flex;gap:.5rem;">
+                            @* <button class="ls-btn ls-btn-ghost ls-btn-sm">
+                                <i data-lucide="filter" style="width:13px;height:13px;"></i>
+                                Filter
+                            </button>
+                            <button class="ls-btn ls-btn-secondary ls-btn-sm">
+                                <i data-lucide="download" style="width:13px;height:13px;"></i>
+                                Export
+                            </button> *@
+                        </div>
+                    </div>
+
+                    <div class="ls-table-scroll">
+                        <table class="ls-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Applicant</th>
+                                    <th>Loan Type</th>
+                                    <th>Amount</th>
+                                    <th>EMI / Mo</th>
+                                    <th>Term</th>
+                                    <th>Rate</th>
+                                    <th>Total Payable</th>
+                                    <th>Docs</th>
+                                    <th>Applied On</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.ReviewLoans.Any())
+                                {
+                                    @foreach (var loan in Model.ReviewLoans)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="ls-table-entity">
+                                                    <div class="ls-entity-avatar">UA</div>
+                                                    <div>
+                                                        <div class="ls-entity-name">User #@loan.UserId.Substring(0, 8)…</div>
+                                                        <div class="ls-entity-id">LN-@loan.LoanId</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="ls-tag ls-tag-@loan.LoanType.ToLower()">@loan.LoanType.ToUpper()</span>
+                                            </td>
+                                            <td><span class="ls-amount">Rs @loan.Amount.ToString("N2")</span></td>
+                                            <td><span class="ls-amount">Rs @loan.EMIAmount.ToString("N2")</span></td>
+                                            <td class="ls-text-muted">@loan.TermInMonths mo</td>
+                                            <td class="ls-text-muted">@loan.InterestRate%</td>
+                                            <td><span class="ls-amount">Rs @loan.TotalPayable.ToString("N2")</span></td>
+                                            <td>
+                                                @if (loan.DocsVerified == "true")
+                                                {
+                                                    <span class="ls-docs-pill ls-docs-yes">✓ Verified</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="ls-docs-pill ls-docs-no">✗ Pending</span>
+                                                }
+                                            </td>
+                                            <td class="ls-text-muted">@loan.AppliedAt.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                <div class="ls-action-row">
+                                                    <a asp-controller="Admin" asp-action="ReviewLoan" asp-route-loanId=@loan.LoanId class="ls-btn ls-btn-primary">Review</a>
+                                                    <a asp-controller="Admin" asp-action="LoanDetails" asp-route-loanId="@loan.LoanId"
+                                                       class="ls-btn ls-btn-ghost ls-btn-sm" title="View Detail">
+                                                        <i data-lucide="eye" style="width:11px;height:11px;"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10">
+                                            <div class="ls-empty-state">
+                                                <i data-lucide="inbox" style="width:22px;height:22px;"></i>
+                                                No applications in review queue.
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="ls-table-footer">
+                        <span class="ls-table-count">Showing @Model.ReviewLoans.Count application(s) in review</span>
+                        @* <a href="#" class="ls-view-all">View All Pending →</a> *@
+                    </div>
+                </div>
+
+         
+                <div class="ls-section-label ls-mb-4">Active Loans</div>
+
+                <div class="ls-table-container ls-mb-6" id="active">
+                    <div class="ls-table-header">
+                        <div>
+                            <div class="ls-table-title">Active Loan Portfolio</div>
+                            <div class="ls-table-sub">Admin-verified loans currently in repayment</div>
+                        </div>
+                        <button class="ls-btn ls-btn-secondary ls-btn-sm">
+                            <i data-lucide="download" style="width:13px;height:13px;"></i>
+                            Export
+                        </button>
+                    </div>
+
+                    <div class="ls-table-scroll">
+                        <table class="ls-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Borrower</th>
+                                    <th>Loan Type</th>
+                                    <th>Principal</th>
+                                    <th>EMI / Mo</th>
+                                    <th>Rate</th>
+                                    <th>Term</th>
+                                    <th>Total Payable</th>
+                                    <th>Collected</th>
+                                    <th>Repayment</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.ActiveLoans.Any())
+                                {
+                                    @foreach (var loan in Model.ActiveLoans)
+                                    {
+                                        var pct = loan.TotalPayable > 0
+                                        ? (int)((loan.TotalPaid / loan.TotalPayable) * 100)
+                                        : 0;
+                                        <tr>
+                                            <td>
+                                                <div class="ls-table-entity">
+                                                    <div class="ls-entity-avatar success">UA</div>
+                                                    <div>
+                                                        <div class="ls-entity-name">User #@loan.UserId.Substring(0, 8)…</div>
+                                                        <div class="ls-entity-id">LN-@loan.LoanId</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="ls-tag ls-tag-@loan.LoanType.ToLower()">@loan.LoanType.ToUpper()</span>
+                                            </td>
+                                            <td><span class="ls-amount">Rs @loan.Amount.ToString("N2")</span></td>
+                                            <td><span class="ls-amount">Rs @loan.EMIAmount.ToString("N2")</span></td>
+                                            <td class="ls-text-muted">@loan.InterestRate%</td>
+                                            <td class="ls-text-muted">@loan.TermInMonths mo</td>
+                                            <td><span class="ls-amount">Rs @loan.TotalPayable.ToString("N2")</span></td>
+                                            <td><span class="ls-amount ls-amount-credit">Rs @loan.TotalPaid.ToString("N2")</span></td>
+                                            <td>
+                                                <div style="display:flex;align-items:center;gap:.5rem;">
+                                                    <div class="ls-mini-progress">
+                                                        <div class="ls-mini-progress-fill" style="width:@pct%;"></div>
+                                                    </div>
+                                                    <span class="ls-text-muted" style="font-size:.65rem;">@pct%</span>
+                                                </div>
+                                            </td>
+                                            <td><span class="ls-status ls-status-active">Active</span></td>
+                                            <td>
+                                                <a asp-controller="Admin" asp-action="LoanDetails" asp-route-loanId="@loan.LoanId"
+                                                   class="ls-btn ls-btn-secondary ls-btn-sm">
+                                                    <i data-lucide="eye" style="width:11px;height:11px;"></i>
+                                                    View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="11">
+                                            <div class="ls-empty-state">
+                                                <i data-lucide="inbox" style="width:22px;height:22px;"></i>
+                                                No active loans found.
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="ls-table-footer">
+                        <span class="ls-table-count">Showing @Model.ActiveLoans.Count active loan(s)</span>
+                        @* <a href="#" class="ls-view-all">View All Active →</a> *@
+                    </div>
+                </div>
+
+                <!-- ═══════ REJECTED LOANS ═══════ -->
+                <div class="ls-section-label ls-mb-4">Rejected Applications</div>
+
+                <div class="ls-table-container ls-mb-6" id="rejected">
+                    <div class="ls-table-header">
+                        <div>
+                            <div class="ls-table-title">Rejected Loan Applications</div>
+                            <div class="ls-table-sub">Declined applications — retained for audit &amp; compliance</div>
+                        </div>
+                        <button class="ls-btn ls-btn-secondary ls-btn-sm">
+                            <i data-lucide="download" style="width:13px;height:13px;"></i>
+                            Export
+                        </button>
+                    </div>
+
+                    <div class="ls-table-scroll">
+                        <table class="ls-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Applicant</th>
+                                    <th>Loan Type</th>
+                                    <th>Requested</th>
+                                    <th>EMI / Mo</th>
+                                    <th>Purpose</th>
+                                    <th>Rate</th>
+                                    <th>Term</th>
+                                    <th>Docs</th>
+                                    <th>Rejected On</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.RejectedLoans.Any())
+                                {
+                                    @foreach (var loan in Model.RejectedLoans)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="ls-table-entity">
+                                                    <div class="ls-entity-avatar danger">UA</div>
+                                                    <div>
+                                                        <div class="ls-entity-name">User #@loan.UserId.Substring(0, 8)…</div>
+                                                        <div class="ls-entity-id">LN-@loan.LoanId</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="ls-tag ls-tag-@loan.LoanType.ToLower()">@loan.LoanType.ToUpper()</span>
+                                            </td>
+                                            <td><span class="ls-amount">Rs @loan.Amount.ToString("N2")</span></td>
+                                            <td><span class="ls-amount ls-amount-debit">Rs @loan.EMIAmount.ToString("N2")</span></td>
+                                            <td class="ls-text-muted" style="max-width:110px;overflow:hidden;text-overflow:ellipsis;">@loan.Purpose</td>
+                                            <td class="ls-text-muted">@loan.InterestRate%</td>
+                                            <td class="ls-text-muted">@loan.TermInMonths mo</td>
+                                            <td>
+                                                @if (loan.DocsVerified == "true")
+                                                {
+                                                    <span class="ls-docs-pill ls-docs-yes">✓ Verified</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="ls-docs-pill ls-docs-no">✗ Pending</span>
+                                                }
+                                            </td>
+                                            <td class="ls-text-muted">@loan.UpdatedAt.ToString("MMM dd, yyyy")</td>
+                                            <td><span class="ls-status ls-status-closed">Rejected</span></td>
+                                            <td>
+                                                <div class="ls-action-row">
+                                                    <a asp-controller="Admin" asp-action="LoanDetails" asp-route-loanId="@loan.LoanId"
+                                                       class="ls-btn ls-btn-ghost ls-btn-sm">
+                                                        <i data-lucide="eye" style="width:11px;height:11px;"></i>
+                                                        View
+                                                    </a>
+                                                    
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="11">
+                                            <div class="ls-empty-state">
+                                                <i data-lucide="inbox" style="width:22px;height:22px;"></i>
+                                                No rejected applications found.
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="ls-table-footer">
+                        <span class="ls-table-count">Showing @Model.RejectedLoans.Count rejected application(s)</span>
+                        @* <a href="#" class="ls-view-all">View Full Audit Log →</a> *@
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>lucide.createIcons();</script>
+
+</body>
+</html>

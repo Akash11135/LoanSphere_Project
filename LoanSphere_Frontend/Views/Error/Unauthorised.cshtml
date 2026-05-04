@@ -1,0 +1,30 @@
+﻿<body class="ls-app">
+    <div class="ls-layout">
+
+        @await Html.PartialAsync("_Sidebar")
+
+        <div class="ls-main">
+            <div style="max-width:600px; margin:80px auto; text-align:center;">
+
+                <div class="ls-card" style="padding:40px;">
+
+                    <div style="font-size:40px;">🚫</div>
+
+                    <h2 class="ls-page-title">Unauthorized Access</h2>
+
+                    <p class="ls-text-muted ls-mb-6">
+                        You need to login to access this page.
+                    </p>
+
+                    <a asp-controller="Auth" asp-action="Login"
+                       class="ls-btn ls-btn-primary">
+                        Go to Login
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</body>

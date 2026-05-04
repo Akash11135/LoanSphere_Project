@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "D:\\college\\CAPEGIMINI\\LoanSphere\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|d:\\college\\capegimini\\loansphere\\loanmanagement\\services\\loanservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|solutionrelative:loanmanagement\\services\\loanservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|d:\\college\\capegimini\\loansphere\\loanmanagement\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|solutionrelative:loanmanagement\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{716111DA-5CAD-47E4-B7C5-FCA255B8862A}|LoanSphere_Frontend\\LoanSphere_Frontend.csproj|d:\\college\\capegimini\\loansphere\\loansphere_frontend\\views\\emi\\payments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{716111DA-5CAD-47E4-B7C5-FCA255B8862A}|LoanSphere_Frontend\\LoanSphere_Frontend.csproj|solutionrelative:loansphere_frontend\\views\\emi\\payments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|d:\\college\\capegimini\\loansphere\\loanmanagement\\services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|solutionrelative:loanmanagement\\services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|d:\\college\\capegimini\\loansphere\\loanmanagement\\repository\\adminrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|solutionrelative:loanmanagement\\repository\\adminrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|d:\\college\\capegimini\\loansphere\\loanmanagement\\controllers\\loancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B183D4E5-7E3F-1A7C-85DA-EAB15AD90124}|LoanManagement\\LoanManagement.csproj|solutionrelative:loanmanagement\\controllers\\loancontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -17,33 +25,33 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 347,
-          "SelectedChildIndex": 0,
+          "DockedWidth": 390,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "LoanService.cs",
-              "DocumentMoniker": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Services\\LoanService.cs",
-              "RelativeDocumentMoniker": "LoanManagement\\Services\\LoanService.cs",
-              "ToolTip": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Services\\LoanService.cs",
-              "RelativeToolTip": "LoanManagement\\Services\\LoanService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "AdminService.cs",
+              "DocumentMoniker": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Services\\AdminService.cs",
+              "RelativeDocumentMoniker": "LoanManagement\\Services\\AdminService.cs",
+              "ToolTip": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Services\\AdminService.cs",
+              "RelativeToolTip": "LoanManagement\\Services\\AdminService.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA6wBsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-28T08:42:39.102Z",
+              "WhenOpened": "2026-05-04T05:34:29.97Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Payments.cshtml",
-              "DocumentMoniker": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanSphere_Frontend\\Views\\EMI\\Payments.cshtml",
-              "RelativeDocumentMoniker": "LoanSphere_Frontend\\Views\\EMI\\Payments.cshtml",
-              "ToolTip": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanSphere_Frontend\\Views\\EMI\\Payments.cshtml",
-              "RelativeToolTip": "LoanSphere_Frontend\\Views\\EMI\\Payments.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMoAAABHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-28T07:05:14.515Z",
+              "DocumentIndex": 2,
+              "Title": "AdminRepo.cs",
+              "DocumentMoniker": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Repository\\AdminRepo.cs",
+              "RelativeDocumentMoniker": "LoanManagement\\Repository\\AdminRepo.cs",
+              "ToolTip": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Repository\\AdminRepo.cs",
+              "RelativeToolTip": "LoanManagement\\Repository\\AdminRepo.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAqwD0AAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-04T05:23:30.454Z",
               "EditorCaption": ""
             },
             {
@@ -61,6 +69,38 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "LoanManagement\\Controllers\\AdminController.cs",
+              "ToolTip": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "LoanManagement\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAAADsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-01T10:04:41.355Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 304,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LoanController.cs",
+              "DocumentMoniker": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Controllers\\LoanController.cs",
+              "RelativeDocumentMoniker": "LoanManagement\\Controllers\\LoanController.cs",
+              "ToolTip": "D:\\college\\CAPEGIMINI\\LoanSphere\\LoanManagement\\Controllers\\LoanController.cs",
+              "RelativeToolTip": "LoanManagement\\Controllers\\LoanController.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAywAkAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-04T04:46:06.873Z",
+              "EditorCaption": ""
             }
           ]
         }

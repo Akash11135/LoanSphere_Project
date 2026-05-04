@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260408083222_EMISchedule")]
-    partial class EMISchedule
+    [Migration("20260501093302_NewColumns")]
+    partial class NewColumns
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,6 +91,12 @@ namespace LoanManagement.Migrations
                     b.Property<double>("InterestRate")
                         .HasColumnType("float");
 
+                    b.Property<bool>("IsRejected")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVerifiedByAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LoanType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -115,8 +121,9 @@ namespace LoanManagement.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LoanId");
 
